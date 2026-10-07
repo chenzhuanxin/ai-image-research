@@ -1,0 +1,475 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>海外 AI 图片生成产品与模型调研（2026 年 10 月）</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%2312564C'/%3E%3Cpath d='M7 22l5-9 4 6 3-4 6 7' fill='none' stroke='%23fff' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='23.4' cy='9.4' r='2.6' fill='%23C4762A'/%3E%3C/svg%3E">
+<style>
+:root{
+  --ink:#1F2329;
+  --ink-2:#646A73;
+  --ink-3:#8A939B;
+  --line:#DEE3E8;
+  --line-2:#EDF1F4;
+  --primary:#12564C;
+  --primary-soft:#E8F0EE;
+  --accent:#C4762A;
+  --accent-soft:#FAEFE3;
+  --bg:#FFFFFF;
+  --bg-soft:#F7F9FA;
+  --serif:"Songti SC","STSong","SimSun",Georgia,"Microsoft YaHei",serif;
+  --sans:"PingFang SC","Microsoft YaHei","Noto Sans SC",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;background:var(--bg);color:var(--ink);
+  font-family:var(--sans);font-weight:400;font-size:16px;line-height:1.78;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1120px;margin:0 auto;padding:0 28px;}
+
+/* ===== 报头 ===== */
+.masthead{border-bottom:2px solid var(--ink);padding:56px 0 22px;margin-bottom:0;}
+.kicker{
+  font-size:13px;letter-spacing:.14em;color:var(--primary);
+  font-weight:700;margin:0 0 18px;text-transform:none;
+}
+h1.title{
+  font-family:var(--serif);font-weight:900;
+  font-size:clamp(28px,4.6vw,50px);line-height:1.22;letter-spacing:-.01em;
+  margin:0 0 16px;max-width:20em;
+}
+.subtitle{font-size:17px;color:var(--ink-2);margin:0 0 26px;max-width:44em;line-height:1.7;}
+.meta-row{
+  display:flex;flex-wrap:wrap;gap:10px 34px;font-size:13.5px;color:var(--ink-2);
+  border-top:1px solid var(--line);padding-top:14px;
+}
+.meta-row b{color:var(--ink);font-weight:700;}
+
+.strip{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:0;
+  border-bottom:1px solid var(--line);margin-bottom:0;
+}
+.strip .cell{padding:22px 22px 22px 0;border-right:1px solid var(--line-2);}
+.strip .cell:last-child{border-right:0;}
+.strip .num{
+  font-family:var(--serif);font-weight:700;font-size:clamp(22px,3.1vw,34px);
+  color:var(--primary);line-height:1.1;font-variant-numeric:tabular-nums;
+}
+.strip .lbl{font-size:13px;color:var(--ink-2);margin-top:7px;line-height:1.55;}
+
+/* ===== 章节 ===== */
+section{padding:54px 0 8px;border-bottom:1px solid var(--line-2);}
+section:last-of-type{border-bottom:0;}
+h2.sec{
+  font-family:var(--serif);font-weight:700;font-size:clamp(21px,2.6vw,28px);
+  margin:0 0 8px;line-height:1.3;display:flex;gap:14px;align-items:baseline;
+}
+h2.sec .no{
+  font-size:13px;font-weight:700;color:var(--accent);letter-spacing:.08em;
+  font-variant-numeric:tabular-nums;flex:none;padding-top:6px;
+}
+.lede{font-size:16.5px;color:var(--ink-2);max-width:46em;margin:0 0 26px;line-height:1.8;}
+p{margin:0 0 16px;}
+h3{font-family:var(--serif);font-weight:600;font-size:18.5px;margin:30px 0 12px;}
+
+/* ===== 表格 ===== */
+.tablewrap{overflow-x:auto;margin:0 0 10px;border:1px solid var(--line);}
+table{border-collapse:collapse;width:100%;table-layout:fixed;min-width:940px;}
+thead th{
+  background:var(--bg-soft);text-align:left;font-weight:700;font-size:13.5px;
+  color:var(--ink-2);padding:12px 14px;border-bottom:1px solid var(--line);
+  vertical-align:bottom;line-height:1.5;
+}
+tbody td{
+  padding:14px;border-bottom:1px solid var(--line-2);vertical-align:top;
+  font-size:14px;line-height:1.68;overflow-wrap:anywhere;
+}
+tbody tr:last-child td{border-bottom:0;}
+tbody tr:hover{background:#FCFDFD;}
+.pname{font-weight:700;font-size:14.5px;}
+.dev{display:block;color:var(--ink-3);font-size:12.5px;margin-top:3px;line-height:1.5;}
+.score{
+  font-family:var(--serif);font-weight:700;font-size:19px;color:var(--primary);
+  font-variant-numeric:tabular-nums;display:block;
+}
+.score.na{color:var(--ink-3);font-size:15px;}
+a{color:var(--primary);text-decoration:none;border-bottom:1px solid rgba(18,86,76,.35);}
+a:hover{border-bottom-color:var(--primary);}
+a.ext::after{content:"↗";font-size:.78em;vertical-align:.18em;margin-left:2px;color:var(--ink-3);}
+.note-inline{color:var(--ink-3);font-size:12.5px;}
+.tag{
+  display:inline-block;font-size:12px;font-weight:700;line-height:1.5;
+  padding:1px 8px;border:1px solid var(--line);color:var(--ink-2);
+  background:var(--bg-soft);margin-bottom:6px;
+}
+.tag.free{color:#fff;background:var(--primary);border-color:var(--primary);}
+.tag.paid{color:#7A4712;background:var(--accent-soft);border-color:#E7D2B8;}
+
+/* ===== 图表（纯 CSS 条形图，无外部依赖） ===== */
+.chart-card{border:1px solid var(--line);padding:22px 20px 14px;margin:0 0 10px;background:var(--bg);}
+.chart-title{font-family:var(--serif);font-weight:600;font-size:16.5px;margin:0 0 4px;}
+.chart-sub{font-size:13px;color:var(--ink-2);margin:0 0 14px;line-height:1.62;}
+.chart{width:100%;}
+.caption{font-size:12.5px;color:var(--ink-3);line-height:1.7;margin:6px 0 0;}
+.hbar{display:grid;grid-template-columns:180px 1fr 44px;gap:10px;align-items:center;margin-bottom:9px;}
+.hbar-label{font-size:13.5px;font-weight:600;color:var(--ink);text-align:right;overflow-wrap:anywhere;line-height:1.4;}
+.hbar-track{background:var(--line-2);height:20px;border-radius:3px;overflow:hidden;}
+.hbar-fill{height:100%;background:var(--primary);border-radius:3px;min-width:2px;}
+.hbar-fill.paid{background:var(--accent);}
+.hbar-val{font-family:var(--serif);font-weight:700;font-size:14px;color:var(--ink);font-variant-numeric:tabular-nums;}
+
+/* ===== 结论块 ===== */
+.findings{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:1px solid var(--line);}
+.findings .f{padding:24px 24px 8px 0;border-right:1px solid var(--line-2);}
+.findings .f:last-child{border-right:0;padding-right:0;}
+.findings .f .t{font-family:var(--serif);font-weight:700;font-size:16.5px;margin:0 0 8px;line-height:1.5;}
+.findings .f p{font-size:14px;color:var(--ink-2);line-height:1.72;margin:0;}
+
+/* ===== 时间线 ===== */
+.timeline{margin:6px 0 0;position:relative;}
+.timeline::before{
+  content:"";position:absolute;top:11px;bottom:11px;
+  left:116.5px;width:1px;background:var(--line);
+}
+.tnode{display:grid;grid-template-columns:104px 26px 1fr;align-items:start;}
+.tnode .when{
+  font-size:13px;font-weight:700;color:var(--primary);text-align:right;
+  padding-right:10px;line-height:22px;font-variant-numeric:tabular-nums;
+}
+.tnode .axis{display:flex;justify-content:center;}
+.tnode .dot{position:relative;z-index:1;width:10px;height:10px;border-radius:50%;background:#fff;border:2px solid var(--primary);margin-top:6px;}
+.tnode.hot .dot{background:var(--accent);border-color:var(--accent);}
+.tnode .body{padding:0 0 22px 14px;}
+.tnode:last-child .body{padding-bottom:0;}
+.tnode .what{font-weight:700;font-size:15px;margin:0 0 3px;line-height:1.55;}
+.tnode .why{font-size:14px;color:var(--ink-2);margin:0;line-height:1.7;}
+
+/* ===== 待确认 ===== */
+.todo{border-top:1px solid var(--line);}
+.todo .t{display:grid;grid-template-columns:34px 1fr;gap:12px;padding:14px 0;border-bottom:1px solid var(--line-2);}
+.todo .t .n{font-family:var(--serif);font-weight:700;color:var(--accent);font-variant-numeric:tabular-nums;font-size:15px;}
+.todo .t .c{font-size:14px;line-height:1.72;color:var(--ink);}
+.todo .t .c b{font-weight:700;}
+
+/* ===== 信源索引 ===== */
+.srcgrp{margin-bottom:28px;}
+.srcgrp h3{margin-top:0;}
+.srclist{margin:0;padding:0;}
+.srcitem{display:grid;grid-template-columns:112px 1fr;gap:12px;margin-bottom:12px;list-style:none;}
+.srclabel{font-size:12.5px;color:var(--ink-3);font-weight:700;line-height:1.6;}
+.srcbody{font-size:14px;line-height:1.7;overflow-wrap:anywhere;}
+.srcfield{display:block;margin-top:2px;font-size:12.5px;color:var(--ink-3);}
+
+footer{padding:34px 0 56px;color:var(--ink-3);font-size:13px;line-height:1.8;}
+footer b{color:var(--ink-2);}
+
+@media (max-width:960px){
+  .strip{grid-template-columns:repeat(2,1fr);}
+  .strip .cell:nth-child(2){border-right:0;}
+  .strip .cell{border-bottom:1px solid var(--line-2);padding-right:16px;}
+  .strip .cell:nth-child(3),.strip .cell:nth-child(4){border-bottom:0;}
+  .findings{grid-template-columns:1fr;}
+  .findings .f{border-right:0;border-bottom:1px solid var(--line-2);padding:20px 0 14px;}
+  .findings .f:last-child{border-bottom:0;}
+  .tablewrap{border:0;overflow:visible;}
+  table{min-width:0;table-layout:auto;display:block;}
+  thead{display:none;}
+  tbody{display:block;}
+  tbody tr{display:block;border:1px solid var(--line);margin-bottom:14px;padding:4px 0;}
+  tbody td{display:grid;grid-template-columns:88px 1fr;gap:10px;border-bottom:1px solid var(--line-2);padding:10px 14px;font-size:13.5px;}
+  tbody td:last-child{border-bottom:0;}
+  tbody td::before{
+    content:attr(data-label);font-size:12.5px;color:var(--ink-3);font-weight:700;line-height:1.6;
+  }
+  .hbar{grid-template-columns:120px 1fr 40px;gap:8px;}
+  .hbar-label{font-size:12.5px;text-align:left;}
+  .tnode{grid-template-columns:78px 20px 1fr;}
+  .tnode .when{font-size:12px;padding-right:7px;}
+  .tnode .body{padding-left:10px;}
+  .timeline::before{left:87.5px;}
+  .meta-row{font-size:14px;}
+  .strip .lbl{font-size:13.5px;}
+  .findings .f p{font-size:14.5px;}
+  tbody td{font-size:14.5px;grid-template-columns:98px 1fr;}
+  tbody td::before{font-size:13px;}
+  .dev{font-size:14px;}
+  .tablewrap a.ext{display:inline-block;padding:10px 0;}
+  .srcitem{grid-template-columns:1fr;gap:2px;}
+  .srclabel{font-size:13px;}
+  .srcbody{font-size:14.5px;}
+  .kicker{font-size:14px;}
+  .strip .lbl{font-size:14px;}
+  .tag{font-size:14px;}
+  h2.sec .no{font-size:14px;}
+}
+@media (max-width:520px){
+  .wrap{padding:0 16px;}
+  .tnode{grid-template-columns:66px 16px 1fr;}
+  .timeline::before{left:73.5px;}
+  .hbar{grid-template-columns:1fr;gap:4px;}
+  .hbar-label{text-align:left;}
+  .hbar-val{font-size:13px;}
+}
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wrap">
+    <p class="kicker">海外 AI 图片调研 · 2026 年 10 月口径</p>
+    <h1 class="title">海外 AI 图片生成产品与模型调研</h1>
+    <p class="subtitle">覆盖 21 个可评分对象：谁在做、能免费用多少、订阅卖多少钱、生成质量处在什么水位。所有数字与网址均附可追溯来源。</p>
+    <div class="meta-row">
+      <span>数据口径：<b>截至 2026-10-07</b></span>
+      <span>计价货币：<b>人民币（CNY）</b></span>
+      <span>信源交叉：<b>官方站点 / 科技媒体 / 用户社区</b></span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="strip" id="stats"></div>
+</div>
+
+<main class="wrap">
+
+<section>
+  <h2 class="sec"><span class="no">01</span>核心结论</h2>
+  <p class="lede">21 个可评分对象里，9 个评分达到 8.0 及以上，且集中在自研模型的厂商与头部聚合平台：OpenAI 图像 9.5、Google 图像（Nano Banana 2 / Pro）9.2、Midjourney 9.0、xAI Grok Imagine 8.9、FLUX 8.8 分列前五；而设计平台与社区生态类产品大多落在 6.6–8.3 区间，Canva 6.6、SeaArt 7.0、DiffusionBee 7.0 为最低三位。获取门槛上，21 个对象里 20 个走「完全免费 / 开源」或「免费额度 + 付费双轨」两条路，只有 Midjourney 明确无免费档；但免费额度的实际含金量差别很大——Google 免费档可直接调用前沿模型（带可见水印），Leonardo.AI 每日 150 个 fast token 属同类最大方之列，Microsoft Designer 免费档则只有每月 15 个 AI credits。</p>
+  <div class="findings" id="findings"></div>
+</section>
+
+<section>
+  <h2 class="sec"><span class="no">02</span>产品字段总表</h2>
+  <p class="lede">同一行回答同一组问题：谁开发的、去哪用、免费用多少、会员多少钱、质量与短板在哪。评分为主观共识评分，非厂商指标。</p>
+  <div class="tablewrap">
+    <table>
+      <colgroup>
+        <col style="width:15%"><col style="width:8%"><col style="width:13%">
+        <col style="width:20%"><col style="width:20%"><col style="width:24%">
+      </colgroup>
+      <thead>
+        <tr>
+          <th>产品 / 开发方</th>
+          <th>评分</th>
+          <th>类型 / 官方入口</th>
+          <th>免费额度</th>
+          <th>价格</th>
+          <th>特点与局限</th>
+        </tr>
+      </thead>
+      <tbody id="mainTable"></tbody>
+    </table>
+  </div>
+  <p class="caption" id="tableCaption"></p>
+</section>
+
+<section>
+  <h2 class="sec"><span class="no">03</span>生成质量评分对比</h2>
+  <p class="lede">评分为主观共识评分，由作者综合科技媒体评测结论与用户社区口碑给出，满分 10 分。维度权重：图像质量与美学 30%、文字渲染 20%、中文/多语言支持 15%、编辑可控性 20%、速度与成本 15%。</p>
+  <div class="chart-card">
+    <p class="chart-title" id="chartScoreTitle"></p>
+    <p class="chart-sub">颜色区分获取门槛：深青为可免费使用（含开源与免费额度），赭色为以付费订阅或 API 调用为主。</p>
+    <div class="chart" id="chartScore"></div>
+    <p class="caption" id="chartScoreCaption"></p>
+  </div>
+</section>
+
+<section>
+  <h2 class="sec"><span class="no">04</span>类型与获取门槛的格局</h2>
+  <p class="lede">把产品按能力类型与免费/付费格局分组，可以看出市场供给结构：文生图、图生图编辑、设计平台内置、社区/开源生态各自站了多少坑位。</p>
+  <div class="chart-card">
+    <p class="chart-title">能力类型分布</p>
+    <p class="chart-sub">按产品 type 字段原文分词计数（多类型产品重复计数）。</p>
+    <div class="chart" id="chartType"></div>
+  </div>
+  <div class="chart-card">
+    <p class="chart-title">免费与付费格局</p>
+    <p class="chart-sub">free=完全免费或开源；mixed=有免费额度且带付费双轨；paid=无免费档仅付费；unknown=无法确认。</p>
+    <div class="chart" id="chartFree"></div>
+  </div>
+</section>
+
+<section>
+  <h2 class="sec"><span class="no">05</span>2025—2026 关键节点</h2>
+  <p class="lede">按公开可查的发布、上线与接口策略变化时点排列，用于理解竞争格局是怎么形成的。</p>
+  <div class="timeline" id="timeline"></div>
+  <p class="caption" id="timelineCaption"></p>
+</section>
+
+<section>
+  <h2 class="sec"><span class="no">06</span>排除清单（未纳入主表的产品）</h2>
+  <p class="lede">考察过但未纳入主表的产品：纯视频生成、纯 3D 建模、停止运营、或信息无法核实者，如实列出。</p>
+  <div class="tablewrap">
+    <table>
+      <colgroup><col style="width:24%"><col style="width:76%"></colgroup>
+      <thead>
+        <tr><th>产品 / 类型</th><th>排除理由</th></tr>
+      </thead>
+      <tbody id="excludedTable"></tbody>
+    </table>
+  </div>
+</section>
+
+<section>
+  <h2 class="sec"><span class="no">07</span>信源索引</h2>
+  <p class="lede">按产品分组，逐条列出全部信源 URL。三类信源交叉验证：官方站点、科技媒体、用户社区。</p>
+  <div id="sourceIndex"></div>
+</section>
+
+<section>
+  <h2 class="sec"><span class="no">08</span>待确认与无法核实项</h2>
+  <p class="lede">以下条目在本轮公开检索范围内无法取得可靠官方口径，如实列出，未作推测填补。</p>
+  <div class="todo" id="todoList"></div>
+</section>
+
+<footer>
+  <p><b>方法与免责：</b>本报告信息采集截止北京时间 2026 年 10 月 7 日，全部价格以人民币计（海外产品引用定价时另注美元原值并约合）。"生成图像质量评分"为主观共识评分，由作者综合科技媒体评测结论与用户社区口碑给出，非厂商官方指标，也不等同于客观基准测试；同一产品在不同画风与题材下表现差异较大。价格与免费额度变动频繁，正式采购前请以厂商官方页面为准。</p>
+</footer>
+
+<script>
+/* ================= 数据（由 data.json 映射；严禁改动字段语义） ================= */
+const REGION = "overseas";
+const PRODUCTS = [{"name": "Krea（含 Krea 2 模型）", "developer": "Krea（美国旧金山，2022 年由 Victor Perez 与 Diego Rodriguez 创立，a16z、Bain Capital Ventures 等投资）", "type": "设计平台内置AI生图·文生图·图生图编辑（含实时生成/放大/视频/3D）", "avail": "mixed", "score": {"value": 8.3, "range": "7.8-9.1", "basis": "多家评测 8.2–9.1：FirmCritics 8.2/10（图像质量 9.0）、AIUnpacking 8.4/10、SaaS AI Reviews 9.1/10、ThePlanetTools 9.0/10、AIToolTier 7.8/10；实时画布与风格控制口碑突出，Krea 2 自研模型获 krea2.net 9.3/10"}, "official_url": "https://www.krea.ai", "official_url_label": "Krea", "free_quota": "免费档每日 100 compute units（计算点数），可用实时模型与基础功能；模型访问、放大与商用授权受限（是否含商用授权来源不一）", "price_cny": "Basic 约合 ¥64/月（约合人民币，按 $9 计）；Pro 约合 ¥249/月（按 $35 计）", "price_usd": "Free $0；Basic $9/月（年付 $5/月，5,000 units）；Pro $35/月（20,000 units）；Max 约 $105/月（来源不一）", "strengths": "实时生成画布体验行业领先，聚合 60+ 图像/视频/3D 模型，Krea 2 自研模型风格控制与审美表现强", "limitations": "免费额度较小；放大/增强质量有社区反映近版本退化；视频侧多为第三方模型、质量参差；Free 档商用授权说法不一", "sources": ["https://www.krea.ai/fr/features/ai-image-generator", "https://www.firmcritics.com/review/krea-ai/", "https://fal.ai/explore/krea", "https://tooliverse.ai/tools/krea"]}, {"name": "Photoroom", "developer": "Photoroom SAS（法国巴黎，2019 年由 Matthieu Rouif 与 Eliot Andres 创立）", "type": "设计平台内置AI生图·图生图编辑（电商产品照片/背景替换/批量）", "avail": "mixed", "score": {"value": 7.9, "range": "7.5-8.5", "basis": "MakerStack 7.9/10；App Store 4.8/5（约 22.6 万评分）、Google Play 4.4/5、appstoretracker 4.83/5；以电商抠图精度与批量能力著称"}, "official_url": "https://www.photoroom.com", "official_url_label": "Photoroom", "free_quota": "免费档每月约 100–250 次导出（来源不一），AI 工具按积分受限；免费导出带水印、不含商用授权", "price_cny": "Pro 约合 ¥53/月（约合人民币，年付 $7.50）或约 ¥92/月（月付 $12.99）；Max 约合 ¥149/月（年付 $20.99）", "price_usd": "Free $0；Pro $12.99/月（年付 $7.50/月）；Max $34.99/月（年付 $20.99/月）；Ultra 约 $82.50/月", "strengths": "电商场景抠图精度业界领先，移动端体验佳，批量处理高效，模板/阴影/AI 背景实用", "limitations": "免费档受限（水印、不可商用）；复杂发丝与透明物体偶有瑕疵；近两年明显涨价；网页端不如移动端成熟", "sources": ["https://www.photoroom.com/pricing", "https://makerstack.co/reviews/photoroom-review/", "https://www.appstoretracker.com/best/photo-editing-apps"]}, {"name": "SeaArt（SeaArt AI）", "developer": "SUNRISEAI PTE. LTD.（新加坡；官网另列 STAR CLUSTER PTE. LTD.，由成都海艺互娱团队开发，创始人陈立、马飞）", "type": "设计平台内置AI生图·社区·开源生态（SD 生态在线平台，含图像/视频/聊天/模型训练）", "avail": "mixed", "score": {"value": 7.0, "range": "6.3-7.3", "basis": "FirmCritics 7.3/10（模型库 8.0、生成质量 7.5、信任/伦理 低分）、RECATOOLS 6.3/10、genfindr 5.5/10；模型库庞大但生成一致性与平台信任问题拉低口碑"}, "official_url": "https://www.seaart.ai", "official_url_label": "SeaArt AI", "free_quota": "免费档每日赠送体力（Stamina，约 130–150/天，来源不一），部分模型输出带水印", "price_cny": "入门 SVIP 约合 ¥21/月（约合人民币，按 $2.99 计）；Standard 约合 ¥71/月（按 $9.99 计）", "price_usd": "Free $0；Beginner SVIP 约 $2.99–5.99/月；Standard 约 $9.99–15/月；Professional 约 $29.99–30/月；Master 约 $49.99–149.99/月（区域差异大）", "strengths": "模型库庞大（官网称 98 万+），免费额度慷慨，支持在线 LoRA 训练与浏览器内 ComfyUI 工作流", "limitations": "社区曾指控未经授权抓取模型；退款/客诉争议多（Reddit 有 [Scam] 投诉）；内容审核收紧且封禁不退体力；质量随所选模型波动大", "sources": ["https://www.seaart.ai/zhTW/mall", "https://cloud.google.com/customers/seaart", "https://www.firmcritics.com/review/seaartai/", "https://recatools.com/ai-directory/seaart/"]}, {"name": "Tensor.Art", "developer": "ECHO INTERNATIONAL HK LIMITED（香港；中国内地关联主体为上海必有回响智能科技有限公司，主体细节待确认）", "type": "社区·开源生态（SD/FLUX 模型托管平台 + 在线生图 + 训练）", "avail": "mixed", "score": {"value": 7.5, "range": "7.0-8.6", "basis": "TopReviewed 7.0/10、FirmCritics 7.1/10（模型库 9.0、内置训练 8.5）、toolpilot 4.3/5、stackscape 4.2/5（≈8.4）；模型库丰富但生成可复现性被诟病"}, "official_url": "https://tensor.art", "official_url_label": "Tensor.Art", "free_quota": "每日免费积分（约 50–100/天，来源不一），免费档有分辨率/步数/并发上限，图片保留期较短（约 14 天）", "price_cny": "Pro 约合 ¥70/月（约合人民币，按 $9.90 计）；年付约合 ¥425/年（按 $59.90 计）", "price_usd": "Free $0（每日免费积分）；Pro $9.90/月、$19.90/季、$59.90/年；另有按日/积分包", "strengths": "模型库巨大（百万级 checkpoint/LoRA），支持免费在线训练与 ComfyUI 工作流，浏览器免本地 GPU", "limitations": "生成可复现性/一致性差；界面复杂；模型质量参差；运营主体与商业使用条款透明度不足", "sources": ["https://tensor.art/", "https://www.firmcritics.com/review/tensorart/", "https://toolchase.com/tool/tensor-art/", "https://www.tianyancha.com/brand/baacc868664"]}, {"name": "Civitai", "developer": "Civit AI, Inc.（2022 年由 Justin Maier 与 Maxfield Hulker 创立；a16z 领投种子轮）", "type": "社区·开源生态（开源模型社区，含站内在线生图 Civitai Generate）", "avail": "mixed", "score": {"value": 7.6, "range": "7.3-8.5", "basis": "TopReviewed 7.3/10、LemonSight 8.2/10、genfindr 8.5/10；平台模型规模与元数据透明度口碑极高，但 Trustpilot 仅 1.6/5（39 条，支付/退款争议）拉低综合"}, "official_url": "https://civitai.com", "official_url_label": "Civitai", "free_quota": "免费浏览/下载绝大多数模型并发布作品；站内生成消耗 Buzz 积分（可通过站内活动赚取，免费档每月固定 0 Buzz）", "price_cny": "Bronze 约合 ¥71/月（约合人民币，按 $10 计）；Gold 约合 ¥355/月（按 $50 计）", "price_usd": "Free $0（Buzz 由站内活动赚取）；Supporter $5/月；Bronze $10/月；Silver、Gold 最高约 $50/月；可另购 Buzz", "strengths": "全球最大开源模型社区，提示词/种子/LoRA 元数据完全透明，可在浏览器内直接试跑模型，支持一键接入本地 ComfyUI", "limitations": "内容审核宽松、NSFW 内容混杂；Buzz 经济系统学习曲线陡；信任与支付争议导致 Trustpilot 低分；模型质量因贡献者而异", "sources": ["https://civitai.com/pricing", "https://www.aiwiki.ai/wiki/civitai", "https://topreviewed.ai/products/civitai", "https://toolchase.com/tool/civitai/"]}, {"name": "Pixelcut（2026 年 2 月曾短暂更名 Pixa，5 月恢复）", "developer": "Pixelcut Inc.（美国加州 Oakland，2020 年由 Dominique Yahyavi 与 Prasanth Veerina 创立）", "type": "图生图编辑·设计平台内置AI生图（背景移除/电商设计/AI 生成）", "avail": "mixed", "score": {"value": 7.4, "range": "7.0-7.8", "basis": "App Store 4.4/5、70M+ 用户；Dupple 评为最佳免费抠图工具、crixpix/zenifiq 正面；但生成式能力受限、prophotocut 评分偏低，综合约 7.4"}, "official_url": "https://www.pixelcut.ai", "official_url_label": "Pixelcut", "free_quota": "免费档含有限背景移除/放大，导出无水印；AI 生成按积分计（Pro 600 积分/月）。免费抠图是否“无限”官方口径不一（部分页面称 3 次/天）", "price_cny": "Pro 约合 ¥57/月（约合人民币，年付 $8）；Business 约合 ¥170/月（年付 $24）", "price_usd": "Free $0；Pro $10/月（年付 $8/月）；Business $30/月（年付 $24/月）；另有 API $0.10/张起", "strengths": "免费无水印抠图，移动端强，批量处理（最高约 1 万张/批），性价比高", "limitations": "生成式 AI 功能受积分限制；免费档抠图次数口径不一；复杂发丝/透明物体精度不及 Remove.bg；品牌短期更名带来认知混乱", "sources": ["https://www.pixelcut.ai/pricing", "https://www.pixelcut.ai/about-us", "https://apps.apple.com/ly/app/pixelcut-ai-photo-editor/id1534785237", "https://www.zenifiq.com/blog/best-ai-background-removers"]}, {"name": "DiffusionBee", "developer": "Divam Gupta（开源个人项目）", "type": "本地开源生态（macOS 本地运行 Stable Diffusion 的桌面应用）", "avail": "free", "score": {"value": 7.0, "range": "6.5-8.2", "basis": "AllAboutAI 4.1/5、工具目录普遍正面；免费本地、隐私强，但仅 macOS、依赖本地算力、更新节奏放缓，综合约 7.0"}, "official_url": "https://diffusionbee.com", "official_url_label": "DiffusionBee", "free_quota": "完全免费、开源，本地无限生成（无云端额度限制，仅受本地算力约束）", "price_cny": "¥0（免费开源，约合人民币 0 元；成本仅为本地电费/硬件）", "price_usd": "$0（开源免费）", "strengths": "一键安装、完全离线本地运行、隐私安全、免费，支持文生图/图生图/补全/放大/自定义模型", "limitations": "仅 macOS（Windows 版 2026 年仍为等待名单、未上线）；需本地算力，Intel Mac 明显偏慢；模型与功能更新节奏滞后于云端平台", "sources": ["https://diffusionbee.com/download", "https://github.com/divamgupta/diffusionbee-stable-diffusion-ui", "https://www.switchtools.io/tool/diffusionbee", "https://www.allaboutai.com/best-ai-tools/generator/mac/"]}, {"name": "Leonardo.AI（Leonardo Phoenix 1.0 / 2.0、Lucid Origin、Lucid Realism，含实时画布与模型训练）", "developer": "Leonardo Interactive Pty Ltd（2024 年 7 月 29 日起为 Canva 旗下公司）", "type": "设计平台内置AI生图 / 文生图 / 图生图编辑（含社区模型与开源生态延伸）", "avail": "mixed", "score": {"value": 8.0, "range": "7.5-8.5", "basis": "Arena.ai 文生图总榜中其自研 Lucid Origin ELO 1013（约 28.7 万次投票）；DIY AI 评测数据集综合 8.3/10（其中图像质量 8.5/10）；AIGearTools 给图像质量 4.6/5；zeroTwo 2026 榜单质量分 80。多家评测一致认为其风格化与游戏美术、英文图内文字较强，照片级写实略逊 Midjourney。"}, "official_url": "https://leonardo.ai", "official_url_label": "Leonardo.AI 官网（leonardo.ai）", "free_quota": "免费档每日 150 个 fast token，按日重置。", "price_usd": "Free $0；Essential $12/月（年付约 $10/月，8,500 tokens/月）；Premium $30/月（年付约 $24/月，25,000 tokens/月）；Ultimate $60/月（年付约 $48/月，60,000 tokens/月），均不含税。团队档 Starter $24/座/月（最少 3 座）、Growth $48/座/月。API 按量计费，起步赠 $5。原 Apprentice / Artisan / Maestro 命名于 2026 年改为 Essential / Premium / Ultimate，价格与 token 额度未变。", "price_cny": "Essential 约 ¥85/月（年付约 ¥71/月）、Premium 约 ¥213/月（年付约 ¥170/月）、Ultimate 约 ¥426/月（年付约 ¥341/月）；团队档约 ¥170/座/月起（约合人民币，按 1 USD ≈ 7.1 CNY）", "strengths": "一条管线覆盖文生图、实时画布 inpainting/outpainting、自定义模型与 LoRA 训练、批量出图与 API，免费档额度在同类产品中最大方，适合需要风格一致性和批量的创作者与游戏美术。", "limitations": "官方定价页无法被自动化抓取，价格与额度来自多个独立第三方汇总页（口径一致）；重写实人像与细节仍弱于头部模型；平台内新旧代际模型并存（V2 系与 Phoenix/Lucid 系）易混淆；官方未公示中文文字渲染能力；非付费档在高峰时段排队明显。", "sources": ["https://leonardo.ai", "https://arena.ai/leaderboard/text-to-image/overall", "https://www.aiinsiders.net/tools/reviews/leonardo", "https://pitchbook.com/profiles/company/530626-78"]}, {"name": "Magnific（原 Freepik；自研 Mystic / Mystic 2.5 + Magnific 放大器，平台内聚合 30+ 第三方图像视频模型）", "developer": "Freepik Company S.L.（Magnific AI 于 2024 年被其收购；2026 年 4 月 28 日公司整体更名为 Magnific）", "type": "设计平台内置AI生图（多模型聚合）+ 图生图编辑 / 放大增强", "avail": "mixed", "score": {"value": 7.8, "range": "7.3-8.3", "basis": "DIY AI 评测数据集综合 8.0/10（图像质量 8.1/10）；Websites2Know 三周实测 Mystic 2.5 得 8.4/10（同平台上 Flux 1.1 得 9.1/10）；AI Chat Daily 认为 Mystic v2 在多数场景接近 Midjourney v6。作为聚合平台，实际成图质量很大程度取决于用户所选模型。"}, "official_url": "https://www.magnific.com", "official_url_label": "Magnific 官网（magnific.com；原 freepik.com 仍可访问，旧放大器官网 magnific.ai 仍保留）", "free_quota": "免费档没有 credits 余额，改用每日生成上限：使用自研模型每日最多约 20 张 AI 图；视频生成、音频、进阶编辑在免费档不可用或严重受限；图库内容每日 10 次下载。", "price_usd": "Premium $20/月（年付 $14.50/月，240,000 credits/年 + 2 亿+ 素材库）；Premium+ $45/月（年付 $33.75/月，600,000 credits/年 + 指定模型无限生成）；Pro $280/月（年付 $210/月，4,000,000 credits/年 + 无限生成）。均为官方页面原价、不含税；年付 credits 一次性发放、按年重置，不按月结转。", "price_cny": "Premium 约 ¥103/月（年付折算）、Premium+ 约 ¥240/月（年付）、Pro 约 ¥1,491/月（年付）；月付口径分别约 ¥142 / ¥320 / ¥1,988（约合人民币，按 1 USD ≈ 7.1 CNY）", "strengths": "一个订阅内聚合 Nano Banana 2、Flux.2、GPT Image、Seedream、Recraft V4 等 30+ 主流图像与视频模型，并自带 Magnific 放大器和商用授权，适合需要在一个平台内切换模型并直接调用素材库的设计与营销团队。", "limitations": "自研 Mystic 并非最强模型，平台成图质量高度依赖第三方模型；无限生成只覆盖 Premium+ / Pro，且部分模型（Nano Banana Pro 1K/2K、Flux.2 Max、GPT Image 1.5 等）已改为消耗 credits；免费档仅约 20 张/日且不可用高级工具；品牌更名导致 magnific.ai 与 magnific.com 并存，资料容易混淆。", "sources": ["https://www.magnific.com/", "https://www.freepik.com/pricing", "https://www.prnewswire.com/news-releases/freepik-becomes-magnific-hits-230m-arr-and-introduces-the-no-collar-creative-economy-302755376.html", "https://diyai.io/data/ai-image-generation-tools-dataset/"]}, {"name": "Recraft（Recraft V4 / V4.1 为当前代际，V3 为上一代）", "developer": "Recraft AI", "type": "文生图 / 图生图编辑 + 矢量图形（SVG）生成与 API", "avail": "mixed", "score": {"value": 8.3, "range": "7.8-8.8", "basis": "官方称 Recraft V3 曾在 Hugging Face 文生图榜连续 5 个月第一，V4（第三方转述）ELO 1172、胜率 72%；ImageBench V1 文本渲染通过率 86.7%（recraft-v4）；APATERO 2026 年 25 组排版类提示实测首次正确率 58%，低于 Ideogram 3 的 75%。官方另称 V4.1 Utility Pro 为 Google、OpenAI 之外评分最高的文生图模型。"}, "official_url": "https://www.recraft.ai", "official_url_label": "Recraft 官网（recraft.ai）", "free_quota": "免费档 $0：注册赠 100 credits，之后每 24 小时补充 50 credits（约 1,500/月）；生成图归 Recraft 所有、公开可见且仅限非商用；24 小时内最多 3 次上传，单次最多同时生成 2 张变体。", "price_usd": "Free $0；Basic $12/月（年付 $10/月，1,000 credits/月）；Pro $20/月（年付 $16/月，2,000 credits/月）起，可按 4,000 credits $40/月（年付 $32）、8,000 credits $80/月（年付 $64）、16,000 credits $160/月（年付 $128）加档；Teams $22/座/月起（年付 $18）。API 预付费，$1 = 1,000 API units：V3 位图 $0.04/张、矢量 $0.08/张；V4.1 位图 $0.035、矢量 $0.08、Pro 矢量 $0.30。", "price_cny": "Basic 约 ¥85/月（年付约 ¥71/月）、Pro 约 ¥142/月起（年付约 ¥114/月起）、Teams 约 ¥156/座/月起（约合人民币，按 1 USD ≈ 7.1 CNY）", "strengths": "目前少数量产级矢量（SVG）生成能力，图标、Logo、品牌系统适配度高，英文长文本渲染与图表能力突出，且提供按张计价透明的 API（$0.035-$0.08/张）。", "limitations": "排版首次正确率仍低于 Ideogram 3；免费档产出必须公开且不可商用、所有权归平台；矢量生成 2 credits/张、Creative Upscale 消耗 20 credits，低价档 credits 消耗快且订阅 credits 不结转；档位命名在 2026 年内改过（llms.txt 的 Basic/Advanced/Pro 与官方计费文档的 Basic/Pro 分档不一致）；未公示中文渲染能力。", "sources": ["https://www.recraft.ai/docs/plans-and-billing/paid-plans", "https://www.recraft.ai/pricing?tab=api", "https://imagebench.ai/best-ai-image-generator-for-text", "https://www.recraft.ai/blog/best-ai-image-generation-api"]}, {"name": "Canva（Magic Media / Dream Lab，Dream Lab 底层为 Leonardo Phoenix 模型）", "developer": "Canva Pty Ltd", "type": "设计平台内置AI生图（含全套 AI 编辑：Magic Edit / Expand / Grab / Eraser、背景移除）", "avail": "mixed", "score": {"value": 6.6, "range": "6.0-7.2", "basis": "多家评测口径一致指向画质弱于专业模型：Knowara 实测每 4 次生成仅约 1.8 张可用、图内文字基本不可用；Fello AI 记录图内文字失败率约 60%；TalentedAtAI 判为“平庸”，指出人脸细节放大后崩坏；Revoyant 与 Fast.io 均称与 Midjourney v6 相比画面更平、光感与构图深度更弱。优势在工作流整合而非成图质量。"}, "official_url": "https://www.canva.com", "official_url_label": "Canva 官网（canva.com）", "free_quota": "免费档含月度 AI 额度，与 Magic Write、Magic Design 等共用同一个额度池；Canva 官方帮助中心的 Dream Lab 使用说明提到每条提示最多生成 4 张、生成会消耗 AI 使用额度（该帮助页在本次检索中未返回可直接访问的 URL）；具体免费张数官方未统一公示，见待确认清单。", "price_usd": "Free $0；Canva Pro $15/月，或 $120/年（折合约 $10/月）；Canva Business / Teams 按座计价，第三方口径约 $10-$20/座/月（最少 3 座）。", "price_cny": "Pro 约 ¥107/月（月付）或约 ¥852/年（年付折合约 ¥71/月）（约合人民币，按 1 USD ≈ 7.1 CNY）", "strengths": "生图、排版、模板、抠图、改尺寸在同一个编辑器内闭环，生成结果可直接拖进设计稿继续编辑，非设计师上手成本最低，并已把 Leonardo 的自研模型内化为 Dream Lab 高质量档。", "limitations": "写实度、细节与光感明显弱于专业模型；图内文字（英文及中文）渲染不可靠，官方未提供文字专项能力；免费档额度小且高质量档（Dream Lab）、背景移除等能力需 Pro；Magic Media 默认输出分辨率偏低（第三方称 2026 年初降至约 384×688 像素），不适用于印刷。", "sources": ["https://www.canva.com", "https://techsifted.com/guides/canva-ai-pricing-2026/", "https://knowara.com/ai-tools/image/canva-ai-image-generator-review/", "https://felloai.com/de/canva-ai-image-generator/"]}, {"name": "Playground（原 Playground AI；自研 Playground v3 + 平台内多模型入口）", "developer": "Playground AI（美国）", "type": "文生图 / 图生图编辑 + 图层式设计画布（多模型社区生态）", "avail": "mixed", "score": {"value": 7.2, "range": "6.5-7.8", "basis": "RECATOOLS 综合评分 6.6/10；Oakgen 2026 免费生图测评给质量分 7.3/10；Tooliverse 提到自研 Playground v3 的文本合成得分为 82%。多个评测的共识是“免费额度好用、画布体验好，但不是第一梯队画质”。"}, "official_url": "https://playground.com", "official_url_label": "Playground 官网（playground.com；2024 年 8 月由 playgroundai.com 更名迁址）", "free_quota": "官方定价页：免费档每日 10 张（第三方口径为每 3 小时滚动 10 张），商用需付费、免费档仅限个人使用；高峰时段需排队、导出为压缩 JPEG；Nano Banana / GPT Image 2 / Seedream 等付费模型的免费额度为每月 3 次。", "price_usd": "Free $0；Pro $15/月（官网月付口径），第三方称按年付费折算约 $12/月；更高档 Pro Plus 约 $45/月（第三方口径，待确认）。", "price_cny": "Pro 约 ¥107/月（月付）；年付约 ¥85/月（第三方口径）（约合人民币，按 1 USD ≈ 7.1 CNY）", "strengths": "免费档每天可用约 10 张并附带模板与图层化画布，同一界面内可切换 Playground v3、GPT Image、Nano Banana、Seedream 等多款模型，适合快速出社媒图与批量概念草图。", "limitations": "免费额度为滚动窗口发放且只许个人使用，商用与高分辨率需付费；自研 v3 自 2024 年 10 月发布后未再有大版本迭代，画质主要依靠外部模型补齐；无中文文字渲染能力公示，也无官方中文支持；域名 playgroundai.com / playgroundai.io 为非官方或已废弃入口，易混淆。", "sources": ["https://playground.com/pricing", "https://aiwiki.ai/wiki/playground_ai", "https://recatools.com/ai-directory/playground-design/", "https://tooliverse.ai/tools/playground"]}, {"name": "Microsoft Designer / Bing Image Creator（Bing Image Creator 现默认使用微软自研 MAI-Image-2.5 系列；Designer 属 Copilot 家族）", "developer": "Microsoft", "type": "设计平台内置AI生图（另有 Copilot 内图像生成与图片编辑）", "avail": "mixed", "score": {"value": 7.5, "range": "7.0-8.0", "basis": "微软自述其自研 MAI-Image-2.5 在 Arena 文生图榜排第 3、图像编辑榜排第 2，并称超过 GPT-Image-1.5 与 Nano Banana Pro 2K，2026 年 8 月进一步迭代到 MAI-Image-2.6（属厂商口径，需独立复测）；微软官方博文另称 Bing Image Creator 已“100% 使用自研模型”。第三方评测多为 DALL·E 时代结论（ToolJunction 认为免费档画质亮眼但模板库偏少、GeekChamp 记录过一次画质回退引发投诉、DEV Community 指出锁死 1024×1024 与过滤过严），对 MAI-Image 系列的独立画质复测在本次检索中较少，故取中等偏上的保守分并标注依据偏厂商口径。"}, "official_url": "https://designer.microsoft.com", "official_url_label": "Microsoft Designer 官网（designer.microsoft.com；生图入口另有 bing.com/create）", "free_quota": "Designer 免费档每月 15 个 AI credits，月初重置（微软帮助文档口径；Designer 内已取消 boost 概念，所有图片自动按最快速度生成）。Bing Image Creator 是另一套免费额度：每天 15 次“快速生成”，用尽后自动降为普通速度，可消耗 Microsoft Rewards 积分换回快速速度；同时每 24 小时最多提交 200 条提示词（含每次“编辑图片”）。", "price_usd": "Designer 本身免费、无独立付费档；加量需购买 Microsoft 365：Personal $9.99/月 或 $99.99/年；Family $12.99/月 或 $129.99/年；Premium $19.99/月 或 $199.99/年（Personal / Family 每月 60 个可用于图像生成与编辑的 AI credits，Premium 为超出标准额度的“广泛使用”）。Copilot Pro 已停止销售，并于 2026 年 8 月 1 日结束支持，由 Microsoft 365 Premium 承接。", "price_cny": "免费档 ¥0；Microsoft 365 Personal 约 ¥71/月 或约 ¥710/年；Family 约 ¥92/月 或约 ¥923/年；Premium 约 ¥142/月 或约 ¥1,420/年（约合人民币，按 1 USD ≈ 7.1 CNY）", "strengths": "对任何微软账号零成本开放，且已于 2025 年 10 月起从 DALL·E 切换到自研 MAI-Image 系列，2026 年 6 月的 MAI-Image-2.5 让 Bing Image Creator 实现 100% 自研，并与 Word、PowerPoint、Photos、Paint 打通，企业场景有微软合规体系背书。", "limitations": "Designer 免费额度仅 15 credits/月，单次会话就可能用尽；Bing Image Creator 免费档每天只有 15 次快速生成，且有每 24 小时 200 条提示词上限；DALL·E 时代的评测普遍反映输出分辨率上限低（约 1024×1024）、无放大与 inpainting，该限制是否在 MAI-Image 上解除待确认；内容过滤属同类最严，正常创意提示词也常被拒；Designer 没有独立付费档，想加量必须购买整套 Microsoft 365；官方未公示中文图内文字渲染能力。", "sources": ["https://www.microsoft.com/en-us/microsoft-365/microsoft-designer", "https://www.bing.com/images/create/ai-image-generator/faq", "https://microsoft.ai/pdf/MAI-Image-2.5-Model-Card.PDF", "https://support.microsoft.com/en-us/office/ai-credits-and-limits-for-microsoft-365-subscriptions-68530f1a-4459-4d02-9818-8233c1f673b8"]}, {"name": "Midjourney（当前默认版本 V8.2）", "developer": "Midjourney, Inc.", "type": "文生图 + 图生图编辑（角色一致性/局部编辑）+ 图生视频", "avail": "paid", "score": {"value": 9.0, "range": "8.5-9.3", "basis": "艺术观感与氛围的行业标杆，多家横测称其在\"艺术/情绪\"盲选票中领先；但指令忠实度与编辑一致性弱于 Nano Banana Pro，默认 V8 输出偏\"过度处理\"（需 --raw）。依据：theairankings.com《Best AI Image Generator》(2026-10-01) 称 V8 系列\"仍产出最具辨识度的电影感画面、在艺术与氛围盲选票中领先\"，同时\"在指令忠实编辑与一致性上弱于 Nano Banana Pro\"；官方 docs.midjourney.com 版本说明印证 V8.2 为当前默认版本。"}, "official_url": "https://www.midjourney.com/", "official_url_label": "Midjourney 官网（midjourney.com）", "free_quota": "无免费档，官方未提供免费试用（theairankings.com 2026-10-01 明确写明 no free trial）。", "price_cny": "Basic 约¥71/月；Standard 约¥213/月；Pro 约¥426/月；Mega 约¥852/月；年付约¥682/¥2045/¥4090/¥8180（约合，按 1 USD≈7.1 CNY）", "price_usd": "官方原价：Basic $10/月、Standard $30/月、Pro $60/月、Mega $120/月；年付 $96/$288/$576/$1152（年付约 8 折）。公司年收入超 100 万美元须使用 Pro 或 Mega 档。", "strengths": "美学/电影感最强，艺术与氛围类盲选票领先；V8.1 起原生 2K 并首次具备可用文字渲染，V8.2 为当前默认；2026-08-27 上线支持最多 4 张参考图的角色一致性编辑模型。", "limitations": "无免费档、成本偏高；指令忠实编辑与一致性不如 Nano Banana Pro；中文等非拉丁文字渲染非其强项；默认输出偏\"过度处理\"；公司年收入超 100 万美元被要求升档；无个人版 IP 赔偿。", "sources": ["https://docs.midjourney.com/hc/en-us/articles/27870484040333-Comparing-Midjourney-Plans", "https://www.midjourney.com/", "https://theairankings.com/best-ai-image-generator/"]}, {"name": "OpenAI 图像生成（ChatGPT Images 2.5；API 的 gpt-image-2.5-flare 与 gpt-image-2.5-sunburst）", "developer": "OpenAI", "type": "文生图 + 图生图编辑（ChatGPT 助手内置 + API 模型）", "avail": "mixed", "score": {"value": 9.5, "range": "9.0-9.8", "basis": "当前综合第一：Sunburst 与 Flare 同时占据 Artificial Analysis 文生图与编辑两榜前两名，并在两个 LMArena 榜单登顶；文字准确率约 99%（跨字系）、支持 4K、单提示词最多 8 张连贯图。依据：theairankings.com (2026-10-01) 转述 Artificial Analysis 与 LMArena 结果；arena.ai 文本生图榜（2026-08-10 快照）GPT Image 2 (Medium) 以 1,381 分居第一。"}, "official_url": "https://openai.com/api/pricing/", "official_url_label": "OpenAI 官方定价页（openai.com）", "free_quota": "ChatGPT 免费档也包含图像生成（2026-09-08 起 Images 2.5 覆盖含免费在内的所有档位），但有每日/限额控制；免费档具体张数官方未公示（待确认）。API 无免费额度。", "price_cny": "ChatGPT：Go 约¥57/月、Plus 约¥142/月、Pro 约¥1420/月；API 图像输出约¥213/1M token；高质量档约¥1.5/张（约合，按 1 USD≈7.1 CNY）", "price_usd": "ChatGPT：Go $8/月、Plus $20/月、Pro $200/月（Business 另有档位）。API（gpt-image-2 系列，官方定价页）：图像输入 $8/1M token、缓存输入 $2/1M、图像输出 $30/1M token；旧 gpt-image-1 按质量约 $0.01（low）/ $0.04（medium）/ $0.17（high）每张方形图；DALL·E 3（legacy）约 $0.04-$0.12/张。第三方横测称 GPT Image 2 高质量 API 档约 $211/1,000 张。", "strengths": "当前综合与文字渲染最强（约 99% 文字准确率、跨字系），指令忠实度与多轮编辑一致性最佳，支持 4K 与单提示词最多 8 张连贯图，免费档即给商业使用权，输出带 C2PA 与 SynthID 溯源。", "limitations": "ChatGPT Plus 有约\"每 3 小时 50 张\"的限额，重度使用受限；内容政策对部分合法创意题材仍会拦截；个人用户无 IP 赔偿（Copyright Shield 仅覆盖 Enterprise 与 API 客户）。", "sources": ["https://openai.com/api/pricing/", "https://openai.com/chatgpt/pricing/", "https://theairankings.com/best-ai-image-generator/"]}, {"name": "Stable Diffusion 3.5 / Stability AI（旗舰图像模型 SD3.5 Large；平台 Brand Studio）", "developer": "Stability AI", "type": "文生图 + 图生图编辑 + 社区·开源生态（开放权重）+ 设计平台内置 AI（Brand Studio）", "avail": "mixed", "score": {"value": 7.5, "range": "7.0-8.2", "basis": "开源权重阵营的重要基线：微调生态最成熟、提示词遵从度在开源模型中居第一梯队，但极致人像写实与超复杂场景弱于 FLUX / Midjourney 等顶尖闭源模型，中文等文字渲染能力弱。依据：sozee.ai 开源模型对比（2026-03-19，更新 2026-07-30）评价其\"微调生态最成熟、Community License 在年收入 100 万美元以下免费\"；社区与横测普遍将其画质列于 FLUX.2 / GPT Image / Nano Banana 之后一档。"}, "official_url": "https://stability.ai/", "official_url_label": "Stability AI 官网（stability.ai）", "free_quota": "API 注册赠送 25 免费 credits（1 credit=$0.01，约 $0.25）；Brand Studio 免费试用一次性 500 credits；SD3.5 开放权重对非商业免费、年收入 100 万美元以下商业免费（Community License）。", "price_cny": "API：Stable Image Ultra 约¥0.57/张、SD3.5 Large 约¥0.46/张、Stable Image Core 约¥0.21/张；Brand Studio：Creator 约¥135/月、Core 约¥355/月（约合，按 1 USD≈7.1 CNY）", "price_usd": "官方 API 按 credits 计（1 credit=$0.01）：Stable Image Ultra 8 credits（$0.08/张）、SD3.5 Large 6.5（$0.065）、SD3.5 Large Turbo 4（$0.04）、SD3.5 Medium 3.5（$0.035）、SD3.5 Flash 2.5（$0.025）、Stable Image Core 3（$0.03）、SDXL 起 0.9（$0.009）。Brand Studio 订阅（kb.stability.ai）：Trial 免费 500 credits（一次性）、Creator $19/月（2,000 credits/月）、Core $50/月（6,000 credits/月）、Enterprise 定制。", "strengths": "开放权重 + 最成熟的微调/LoRA 生态，许可友好（年收入 100 万美元以下可免费商用），API 单张成本低；公司完成 Series B 后持续运营并推出 Brand Studio 平台。", "limitations": "图像质量与顶尖闭源模型有差距，极致人像写实偏\"磨皮感\"、超复杂场景偶有结构偏差；中文文字渲染能力弱（非其设计强项）；生成多样性偏低；云端产品线更名/并入 Brand Studio，DreamStudio 现状待确认。", "sources": ["https://platform.stability.ai/pricing", "https://kb.stability.ai/knowledge-base/brand-studio-subscription-plans-overview", "https://stability.ai/news"]}, {"name": "FLUX（Black Forest Labs；当前 FLUX.2 系列 max / pro / flex / dev / klein，另有 FLUX 3 Image）", "developer": "Black Forest Labs（BFL，由原 Stable Diffusion 团队创立）", "type": "文生图 + 图生图编辑 + 社区·开源生态（[dev]/[klein] 开放权重）+ API 平台 + 设计平台内置渠道（Adobe Firefly / Freepik 等）", "avail": "mixed", "score": {"value": 8.8, "range": "8.0-9.5", "basis": "写实派第一梯队：光学物理级光照、皮肤与材质细节被评测者评为与 Nano Banana Pro 相当或更高；开放权重 [klein]/[dev] 提供最高的自托管自由度。依据：theairankings.com (2026-10-01) 称其为 photorealism leader、写实度 \"at or above Nano Banana Pro\"；sozee.ai（2026-07-30 更新）称 FLUX.2 [dev] 写实领先但需单独商用授权、[klein] 为 Apache-2.0 授权门槛最低。"}, "official_url": "https://bfl.ai/", "official_url_label": "Black Forest Labs 官网（bfl.ai，即 blackforestlabs.ai）", "free_quota": "API 无免费档（按量付费）；开放权重 [dev]（32B）与 [klein]（Apache-2.0）可免费自托管，[klein] 授权门槛最低。具体免费试用额度官方未公示。", "price_cny": "API：[pro] 约¥0.21/百万像素、[max] 约¥0.50/百万像素、[klein] 约¥0.10/张起；自托管开源权重免费（约合，按 1 USD≈7.1 CNY）", "price_usd": "官方 API 按量计费、无订阅：FLUX.2 [pro] 约 $0.03/百万像素、[max] 约 $0.07/百万像素、[flex] 约 $0.05/百万像素、[klein] 4B 约 $0.014 起 / 9B 约 $0.015 起；Turbo 档约 $0.008/百万像素（第三方横测口径）。开放权重 [dev]（32B）免费自托管（受许可约束），[klein] 为 Apache-2.0。", "strengths": "写实与材质/光影表现领先，模型阶梯完整（闭源 API 的 max/pro + 开放权重的 dev/klein/flex），支持最多约 10 张参考图与 4MP 输出，并作为伙伴模型接入 Adobe Firefly 等渠道。", "limitations": "旗舰模型对硬件要求高（24GB+ 显存，[max] 更高）；社区反映 [klein] 审查偏严、人体结构弱于竞品；[dev] 商用需单独授权；无 IP 赔偿；中文文字渲染非其主打能力。", "sources": ["https://bfl.ai/", "https://docs.bfl.ml/", "https://theairankings.com/best-ai-image-generator/"]}, {"name": "Adobe Firefly（Firefly Image Model 5；含 Photoshop/Express 集成）", "developer": "Adobe", "type": "设计平台内置 AI 生图 + 文生图/图生图编辑（Photoshop、Express、Firefly 网页/移动端；并集成 Google/OpenAI/Flux 等伙伴模型）", "avail": "mixed", "score": {"value": 7.8, "range": "7.0-8.5", "basis": "自有 Firefly Image Model 5 纯画质不属第一梯队（榜单头部由 GPT Image / Nano Banana / Grok 占据），但\"商用安全 + Content Credentials + Creative Cloud 深度集成\"构成差异化优势；Adobe 同时集成 Google/OpenAI/Flux 等伙伴模型，侧面反映其自有模型非画质领导者。依据：theairankings.com (2026-10-01) 榜单未将 Firefly 自有模型列入画质头部；Adobe 官方博客（2025-10-28）确认 Firefly Image Model 5 于 MAX 2025 进入 public beta，并把 Gemini 2.5 (Nano Banana)、Veo、Flux、Runway 等伙伴模型引入 Firefly。；第三方评测普遍给 8/10 左右：PromptSpace 综合 8.1/10、Worldmetrics 图像放大 9.1/10、aidailyshot 4.3/5；编辑工具集成熟但纯生成质量中等，综合约 7.5"}, "official_url": "https://www.adobe.com/products/firefly/plans.html", "official_url_label": "Adobe Firefly 官方方案页（adobe.com）", "free_quota": "有免费档：Firefly Free（$0），提供\"每日有限的免费生成次数\"，可试用标准图像/矢量与部分高级视频、音频功能；超出需付费订阅。；免费档按 24 小时计：背景移除/图像放大 2x/清理/重打光各约 20 次，文字移除 50 次；输出带水印、标准分辨率", "price_cny": "Standard 约¥71/月、Pro 约¥142/月、Pro Plus 约¥355/月、Premium 约¥1420/月；Creative Cloud Pro 约¥497/月（约合，按 1 USD≈7.1 CNY）", "price_usd": "官方原价（US）：Firefly Free $0（每日有限生成）；Firefly Standard $9.99/月（2,000 credits/月）；Firefly Pro $19.99/月（4,000 credits/月）；Firefly Pro Plus $49.99/月（10,000 credits/月）；Firefly Premium $199.99/月（50,000 credits/月 + Firefly 视频模型不限量）。Creative Cloud Pro $69.99/月（4,000 credits + 20+ 应用）；Creative Cloud 单应用 $22.99/月（25 credits/月）。所有付费档标准图像生成不限量，credits 用于视频/音频/伙伴模型等高级功能，按月重置不结转。（注：部分 Adobe 页面出现 Firefly Pro $29.99 / 7,000 credits 的旧版或测试文案，与主定价页不一致，见待确认清单。）", "strengths": "Adobe 自有模型训练数据来自授权与公有领域内容、主打\"商用安全\"，自动附带 Content Credentials，企业客户可获 IP 赔偿；与 Photoshop/Express 等深度集成，且一站集成 Google/OpenAI/Flux 等伙伴模型。；一站式多工具（抠图/放大/清理/重打光/去字/扩图/文生图），免费额度在同类中偏高，边缘/产品图效果稳", "limitations": "自有模型纯画质与文字渲染不及 GPT Image / Nano Banana 头部；创意风格偏保守（安全优先）；免费档额度有限；高级功能（视频、伙伴模型）消耗 credits，额度用尽需等月度重置或加购；更偏\"工作流工具\"而非极致艺术探索。；免费档有水印且分辨率受限；品牌两次易主（Stability→Jasper），长期路线存在不确定性；纯生成质量不及专业生成平台", "sources": ["https://www.adobe.com/products/firefly/plans.html", "https://www.adobe.com/plans/creativecloud.html", "https://news.adobe.com/news/downloads/pdfs/2025/10/102825-creative-cloud.pdf", "https://clipdrop.co/pricing", "https://www.usetools.design/tools/clipdrop", "https://tooliverse.ai/tools/clipdrop", "https://stability.ai/blog/stability-ai-acquires-init-ml-makers-of-clipdrop-application/"]}, {"name": "Google 图像生成（Nano Banana 2 = Gemini 3.1 Flash Image、Nano Banana 2.1、Nano Banana Pro = Gemini 3 Pro Image；Imagen 系列仍在 Cloud 侧提供）", "developer": "Google / Google DeepMind", "type": "文生图 + 图生图编辑（Gemini App / AI Mode 内置 + Gemini API + Vertex/Cloud）", "avail": "mixed", "score": {"value": 9.2, "range": "8.5-9.6", "basis": "文字渲染、角色/身份一致性、对话式编辑（可混合最多 14 张图、5 个人物）与 4K 输出均属顶尖，且是最慷慨的免费强模型入口；但已不再垄断榜首——Nano Banana 2 在 Artificial Analysis 文生图榜第 6、Nano Banana Pro 第 11。依据：theairankings.com (2026-10-01) 引 Artificial Analysis 榜单与功能横评；arena.ai 文本生图榜（2026-08-10 快照）Nano Banana 2 以 1,264 分列第 7。"}, "official_url": "https://one.google.com/about/google-ai-plans/", "official_url_label": "Google AI 方案官方页（one.google.com）+ Gemini 应用（gemini.google.com）", "free_quota": "Gemini App 免费档每天可用 Nano Banana 2 生成/编辑图片（官方曾公示\"每天最多 20 张\"，2026 年 5 月起不再公布具体数字），另有约 2 次/天用 Nano Banana Pro 重做的额度；免费档图片带可见 Gemini 水印 + 不可见 SynthID 水印。API 无免费额度（按量付费）。", "price_cny": "Google AI Plus 约¥35-71/月（400GB/2TB）、AI Pro 约¥142/月、AI Ultra 约¥710 或 ¥1420/月；API：Nano Banana 2 约¥0.48/张（1K）、Nano Banana Pro 约¥1.70/张（4K）（约合，按 1 USD≈7.1 CNY）", "price_usd": "订阅：Google AI Plus $4.99/月（400GB）或 $9.99/月（2TB，官方 Google One 页）、Google AI Pro $19.99/月、Google AI Ultra 两档（5x/20x），第三方与横测口径为 $99.99/月 与 $199.99/月（Ultra 由 $249.99 下调），官方页面价格为动态渲染、本次未直接显示（见待确认清单）。API（官方 Gemini API 定价页）：Nano Banana 2 约 $0.067/张（1K），Nano Banana Pro 约 $0.24/张（4K）；Gemini 3.1 Flash Image 每张输入图消耗 1,120 token，输出图 512/1K/2K/4K 分别约 747/1,120/1,680/2,520 token。", "strengths": "免费档即可用前沿模型（同价位最慷慨）；文字渲染（段落、招牌、图表）、身份一致性（无需微调即可锁定同一张脸）与对话式编辑最强；支持 Google 搜索接地、最高 4K、一次混合最多 14 张输入图。", "limitations": "最强能力（Pro、4K、高吞吐）在付费档或付费 API 之后；地区可用性受限（部分能力分国家开放）；美术风格偏\"干净\"、不如 Midjourney 有艺术感；免费/Pro 档图片带可见水印；原 Nano Banana（Gemini 2.5 Flash Image）API 已于 2026-10-02 停用。", "sources": ["https://one.google.com/about/google-ai-plans/", "https://ai.google.dev/gemini-api/docs/pricing", "https://felloai.com/fr/is-nano-banana-free/"]}, {"name": "xAI Grok Imagine（当前 Grok Imagine Image 2.0）", "developer": "xAI", "type": "文生图 + 图生图编辑 + 助手内置（grok.com / X）+ 图生视频 + API", "avail": "mixed", "score": {"value": 8.9, "range": "8.2-9.4", "basis": "已进入第一梯队：Arena 文本生图榜（2026-08-10 快照）Grok Imagine Image 2.0 (Low) 以 1,316 分列第 3；Artificial Analysis 文生图榜与 LMArena 编辑榜均列第 4（2026-10-01 口径）。依据：intelligentliving.co (2026-09-27) 引 arena.ai 文本生图榜快照；theairankings.com (2026-10-01) 称其 \"sits fourth on Artificial Analysis's text-to-image board and fourth on LMArena's editing board\"。"}, "official_url": "https://grok.com/imagine", "official_url_label": "Grok Imagine（grok.com/imagine）+ xAI 官网（x.ai）", "free_quota": "有免费档（需 X 账号登录），但高级能力严格限量（社区实测约\"每 2 小时 5 次 Think 提问\"、图片生成每日约 10 次量级；官方未公示确切数字，待确认）；高峰时段可能排队或暂不可用。", "price_cny": "SuperGrok Lite 约¥71/月、SuperGrok 约¥213/月、Heavy 约¥2130/月；X Premium+ 约¥284/月；API 按量计费（约合，按 1 USD≈7.1 CNY）", "price_usd": "订阅：SuperGrok Lite $10/月、SuperGrok $30/月（约 $300/年）、SuperGrok Heavy $300/月；X Premium+ 约 $40/月。API：经 xAI / fal.ai 按量付费、无订阅与最低消费；图像模型（grok-imagine-image、-image-2.0、-image-quality）公布限流（RPS）档位，但官方未公示\"每张图\"单价（见待确认清单）。", "strengths": "指令遵循细致，官方称其\"像设计师一样规划排版\"；支持魔法棒与分割式编辑、去背景、单次最多 5 张参考图；与 X 平台深度绑定、内容限制相对更少，并有短时视频生成。", "limitations": "图像 API 单张价格未公示、未提供独立 IP 赔偿；免费档限额严格并受高峰排队影响；文字渲染与多轮编辑一致性仍不及 GPT Image / Nano Banana 头部；中文文字渲染非其强项；产品能力随 X 订阅体系绑定。", "sources": ["https://grok.com/imagine", "https://www.intelligentliving.co/mai-image-2-6-preview/", "https://theairankings.com/best-ai-image-generator/"]}, {"name": "Ideogram（当前 Ideogram 4.0，开源权重；另有 4.5 多轮编辑）", "developer": "Ideogram AI", "type": "文生图 + 图生图编辑 + 社区·开源生态（开放权重）+ API", "avail": "mixed", "score": {"value": 8.5, "range": "8.0-9.0", "basis": "图内文字渲染的专精选手：官方公布 X-Omni 英文 OCR 得分 0.97，为同类开源权重模型最高；支持边界框版面控制、结构化 JSON 提示词与最多 16 个 HEX 色值锁定；但通用写实与艺术性不及 FLUX / Midjourney。依据：morphic.com 模型页（Ideogram 4.0，2026-06-03 发布，9.3B 参数，OCR 0.97）；theairrankings.com (2026-10-01) 称其为 typography specialist。"}, "official_url": "https://ideogram.ai/", "official_url_label": "Ideogram 官网（ideogram.ai）", "free_quota": "有免费档：每周 10 个 slow credits、2 个画布，生成内容公开且带水印、无商业使用权（第三方追踪站 ToolColumn 标注\"官方来源\"，2026-08-16 复核）。", "price_cny": "Plus 约¥142/月（年付约¥107/月）；Pro 约¥426/月（年付约¥298/月）；Team 约¥213/月或约¥142/人/月（年付）；API 约¥0.21-0.71/张（约合，按 1 USD≈7.1 CNY）", "price_usd": "订阅（ToolColumn 2026-08-16 复核）：Free $0；Plus $20/月 或 $15/月（年付，$180/年）；Pro $60/月 或 $42/月（年付，$504/年）；Team $30/月 或 $20/人/月（年付，$240/年，最少 2 人）。API 与订阅分开计费：Turbo 约 $0.03/张，Default/Quality 约 $0.06-$0.10/张。官方 ideogram.ai/pricing 页面在本次核验中未渲染出价格，价格数值来自第三方追踪站（见待确认清单）。", "strengths": "文字/版式最强项（英文 OCR 0.97，可渲染大段正文与多语言），边界框精确排版、JSON 结构化提示词与调色板锁定适合海报、包装、电商与批量程序化生成；4.0 起转为开放权重，可自托管与微调。", "limitations": "通用写实与艺术性不及 FLUX / Midjourney 一档；短提示词下易退化为拼贴/网格式排版（依赖结构化提示词）；免费档公开+水印+无商用；2K 上限（低于支持 4K 的竞品）；中文文字渲染准确性弱于其英文表现；官方定价页在本次核验中未能渲染，价格来源为第三方。", "sources": ["https://ideogram.ai/", "https://www.toolcolumn.com/pricing/ideogram-pricing", "https://morphic.com/zh/resources/models/ideogram-4"]}];
+const EXCLUDED = [{"name": "Google Whisk（whisk.google / Google Labs 图生图重混工具）", "reason": "原定采集的类型为“图生图编辑/重混”，但经核验该产品已于 2026 年 4 月 30 日停止运营：Google 官方发布说明明确记录 Whisk 于 2026 年 4 月 30 日迁移至 Flow，Google 支持社区公告亦称 Whisk 将下架并把关键能力迁往 Flow；Google 官方博客（2026-02-25）确认 Whisk 与 ImageFX 的最佳能力并入 Google Flow（labs.google/flow），图像生成改由 Nano Banana 承担，资产迁移自 2026 年 3 月起开放。产品不再独立存在，故移入排除清单。若需补位，建议以 Google Flow 另立条目并重新定义字段口径（其主定位为 AI 影视化创作工具，而非纯图生图重混）。"}, {"name": "playgroundai.io / playgroundai.wixsite.com（第三方站点，非官方）", "reason": "任务清单要求核验 Playground AI 的当前域名。核验结论：官方域名为 playground.com（2024 年 8 月由 playgroundai.com 更名迁址）。playgroundai.io 自称“Playground AI”但产品定位（Flyer Maker、App Builder、音乐生成等）与原 Playground 不一致，属第三方或仿冒站点；playgroundai.wixsite.com 为同名个人站点。二者均不作为官方信源收录。"}, {"name": "DALL·E 3（作为独立产品条目）", "reason": "已被 OpenAI 的 gpt-image 系列（当前 ChatGPT Images 2.5 / gpt-image-2.5 系列）取代，不再是主力模型，仅作为 legacy 模型在 API 中保留（约 $0.04-$0.12/张）。作为\"OpenAI 图像生成\"条目的历史版本说明保留，不单列为 2026 年 10 月在售主力产品。"}, {"name": "Microsoft MAI-Image-2.6", "reason": "属同类重要新入局者（2026-08-10 发布，Arena 文本生图曾列第 2、Artificial Analysis 图像编辑榜第 1），但仅提供 MAI Playground 与 Microsoft Foundry 私有预览，无公开发布形态、无公开 API、无定价（公开定价为 N/A），无法满足本批次\"官方网址/价格/免费额度可核验\"的同质量标准，故不纳入产品表，改列入待确认/观察。"}];
+const PENDING = [{"item": "Clipdrop Pro 月费具体金额", "reason": "第三方来源在 $7–$15/月间不一致（以 $9 最常见），官方定价页无法通过抓取工具直接访问核验"}, {"item": "Krea Max 档价格", "reason": "来源在约 $48–$105/月间不一致，未能核验官方页面"}, {"item": "Krea 免费档是否含商用授权", "reason": "toolchase 称含商用授权、aipricecompare 称 Free 不含商用授权，官方口径不一致"}, {"item": "SeaArt 免费每日体力数值与运营主体", "reason": "每日 Stamina 有 130/150 两种说法；主体在 SUNRISEAI PTE. LTD. 与 STAR CLUSTER PTE. LTD. 间并列表述"}, {"item": "Tensor.Art 免费每日积分与运营主体", "reason": "免费积分有 50/天与 100/天两种说法；主体在 ECHO INTERNATIONAL HK LIMITED 与上海必有回响智能科技间需进一步核验"}, {"item": "Photoroom 免费档导出上限", "reason": "来源在 100 次/月与 250 次/月之间不一致"}, {"item": "Pixelcut 免费档抠图是否无限", "reason": "官方部分页面称免费导出入水印无限抠图，另一部分页面称 3 次/天，口径冲突"}, {"item": "Civitai 是否存在永久免费计划", "reason": "多数来源称核心浏览/下载永久免费，toolradar 称无永久免费计划，说法冲突"}, {"item": "各产品官方定价页的可核验性", "reason": "clipdrop.co、krea.ai、photoroom.com、tensor.art 等定价页在本环境无法直接抓取，价格多取自官方页面的第三方转载与汇总，已尽量交叉比对"}, {"item": "Canva 免费档与 Pro 档的具体 AI 额度数字，以及官方 USD 定价页", "reason": "Canva 官方定价页对自动化访问不可用（robots.txt 拒绝抓取，直接访问被区域重定向到中文站点，未拿到 USD 原价页），官方帮助中心的 Dream Lab 说明在本次检索中也没有返回可直接访问的 URL，只说明“生成会消耗 AI 额度”“每条提示最多 4 张”，没有统一数字。第三方口径分散在“免费约 20 张/月”“免费 50 次终身”“免费 200 Standard / 20 Premium 额度”“Pro 500 张/月”等多个版本，无法互相印证到同一数字。因此 Canva Pro 的 $15/月、$120/年 由多个独立第三方来源交叉一致确认，但与免费额度的具体张数一并标记待确认，建议人工打开 canva.com/pricing 复核。"}, {"item": "Leonardo.AI 官方定价页与档位名称", "reason": "leonardo.ai/pricing 无法被自动化抓取（工具返回 site not supported，非 404 或权限错误）。$12 / $30 / $60、8,500 / 25,000 / 60,000 tokens 与免费档 150 tokens/日 均来自多个互相独立的第三方汇总页且口径完全一致（2026-05 至 2026-10），但“Apprentice/Artisan/Maestro”与“Essential/Premium/Ultimate”两种命名在不同来源中并存，疑似 2026 年中途更名。建议人工复核官方页面确认当前档位名称。"}, {"item": "Recraft 档位结构与命名", "reason": "同一官方域名下两份自家文档冲突：llms.txt（2026-02 更新）写 Free / Basic $10-12 / Advanced $27-33 / Pro $48-60 / Teams $55 per seat；官方计费文档 paid-plans（2026-08 更新）写 Basic $12（1,000 credits）外加按 credits 分档的 Pro（2,000/4,000/8,000/16,000 credits，$20/$40/$80/$160 月付）。线上 pricing 页为前端渲染，本次抓取未取到档位表。data.json 采用更新时间更晚的 paid-plans 文档口径，命名与折扣需人工确认。"}, {"item": "Playground 免费额度口径与年付价格", "reason": "官方 playground.com/pricing 写“免费档每日 10 张”“Pro $15/月（按月扣费）”；多个第三方写“每 3 小时滚动 10 张”“Pro 年付约 $12/月”“Pro Plus $45/月”。两者对“每日”与“滚动窗口”的描述不同，且官网未列出年付价格，需人工确认。"}, {"item": "MAI-Image 系列的独立第三方画质评测", "reason": "Bing Image Creator 已于 2025 年 10 月起切换为微软自研 MAI-Image 系列（现为 MAI-Image-2.5 系列，2026 年 8 月迭代到 2.6），“Arena 文生图第 3、图像编辑第 2”来自微软自述与自家 Model Card，属厂商口径；本次检索到的第三方评测大多仍是 DALL·E 3 时代的结论，无法直接套用。该条目的评分因此标注为依据偏厂商口径，建议补一次独立复测。"}, {"item": "中文（非拉丁文字）文字渲染能力：本批次全部产品均无官方数据", "reason": "8 个产品的官方页面与文档均未公示中文或其它非拉丁文字的图内渲染专项能力，第三方评测（ImageBench、APATERO 等）也基本只测英文排版。因此评分依据里只采用了可核验的英文文字与通用画质证据，中文渲染能力不参与加减分。若报告需要“中文文字渲染”字段，建议单列并标注“待确认”，或改用专项测试补齐。"}, {"item": "Microsoft Designer 免费 credits 数与 Bing Image Creator 免费次数的关系", "reason": "两条免费额度来自不同官方入口、计量单位不同：Designer 免费档为每月 15 个 AI credits（微软帮助文档“理解 AI credits”与官方问答），Bing Image Creator 为每日 15 次快速生成（官方 Bing FAQ）。官方 Designer 落地页仅写“monthly credits”而未给出具体数字。已在 data.json 中分别标注，避免混为一谈。"}, {"item": "Adobe Firefly 免费额度与当前模型代际", "reason": "免费档“每月 25 个生成式 credits”来自第三方评测，Adobe 官方 plans 页面本次只抓到付费档 credits 表（2,000 / 4,000 / 10,000 / 50,000）与“Free trial”字样，未给出免费档具体数字；另外官方文档确认的主力模型为 Firefly Image Model 4 / 4 Ultra，但有第三方称 2026 年 4 月已更新至 Image Model 5，官方页面未在本次核验中确认。均标待确认。"}, {"item": "Adobe Firefly 是否应计入本批次", "reason": "Firefly 不在任务给定的 7 个产品清单内，是本次核验过程中识别出的同类重要遗漏（设计平台内置 AI 生图）并按“可补充”要求采集，字段标准与其余产品一致。由于其它批次（如“海外-大厂模型”“海外-文生图”）可能同样覆盖 Adobe，交付时请做跨批次去重，避免报告内重复计数。"}, {"item": "Ideogram 官方定价页（ideogram.ai/pricing）中的具体档位价格", "reason": "本次核验中该官方页面未能渲染出价格内容；Plus $20 / Pro $60 等数值来自第三方追踪站 ToolColumn（标注\"官方来源\"、2026-08-16 复核），需以官方页面二次确认。"}, {"item": "xAI Grok Imagine 图像 API 的单张美元价格", "reason": "xAI 与 fal.ai 均未公示\"每张图\"单价，仅公布订阅档位与 API 限流（RPS）信息，无法给出可核验的按张计费价格。"}, {"item": "Google AI Ultra 的具体月费（5x 档 / 20x 档）", "reason": "官方 one.google.com 方案页明确存在\"Ultra 5x\"与\"Ultra 20x\"两档，但价格为页面动态渲染、本次未显示；第三方与横测口径为 $99.99/月 与 $199.99/月（Ultra 由 $249.99 下调），需官方页面确认。"}, {"item": "Adobe Firefly Pro 档位口径（$19.99/4,000 credits 与 $29.99/7,000 credits 并存）", "reason": "Adobe 主定价页、FAQ 与 Creative Cloud 页均为 Firefly Pro $19.99/月（4,000 credits），但 Adobe 另一推广/着陆页出现 Firefly Pro $29.99/月（7,000 credits），疑为旧版或 A/B 测试文案，需确认现行口径。"}, {"item": "Stability AI DreamStudio 的运营现状（是否已被 Brand Studio 取代）", "reason": "官方新闻页显示 2026-04-08 推出 Brand Studio 平台；第三方站点称 DreamStudio 已升级为 Brand Studio，但缺少官方页面直接印证 DreamStudio 的停运/迁移状态，尚未核实。"}, {"item": "ChatGPT 免费档图像生成的具体每日额度", "reason": "官方未公示免费档图像生成的具体每日张数（Images 2.5 已覆盖含免费的所有档位），仅在横测中提及 Plus 档约\"每 3 小时 50 张\"，免费档数字待确认。"}, {"item": "Imagen 系列（非 Gemini 品牌）独立产品线的当前版本与定价", "reason": "Google 已将消费端图像生成统一到 Nano Banana（Gemini 3.x Image）品牌，Imagen 主要在 Cloud 侧出现；本次未核验到 Imagen 独立旗舰（如 Imagen 5）的官方模型页与定价，现状待确认。"}];
+const TIMELINE = [{"date": "2019", "title": "Photoroom 成立于巴黎", "desc": "Matthieu Rouif 与 Eliot Andres 在巴黎创立 Photoroom，后加入 Y Combinator（YC S20）。", "source": "https://www.ycombinator.com/companies/photoroom"}, {"date": "2022", "title": "Krea 成立于旧金山", "desc": "Victor Perez 与 Diego Rodriguez 创立 Krea，后成为聚合多模型的实时创作平台。", "source": "https://fal.ai/explore/krea"}, {"date": "2023.03", "title": "SeaArt AI 上线", "desc": "SeaArt 于 2023 年 3 月推出 AI 图像生成服务，5 个月内用户增长约 20 倍。", "source": "https://cloud.google.com/customers/seaart"}, {"date": "2023.03", "title": "Stability AI 收购 Clipdrop 母公司 Init ML", "desc": "Stability AI 收购 Init ML（Clipdrop 开发方），将其纳入自家生成式 AI 工具矩阵。", "source": "https://stability.ai/blog/stability-ai-acquires-init-ml-makers-of-clipdrop-application/"}, {"date": "2024.02", "title": "Clipdrop 从 Stability AI 转售给 Jasper", "desc": "Stability AI 将 Init ML（Clipdrop）剥离出售给 Jasper，Clipdrop 现以 Jasper 旗下产品运营。", "source": "https://aipedia.wiki/tools/clipdrop/"}, {"date": "2024.07", "title": "Canva 收购 Leonardo.AI", "desc": "Canva 宣布收购生成式 AI 公司 Leonardo.AI，据投资方文件交易额不低于 3.2 亿美元，Leonardo 此后作为独立平台继续运营。", "source": "https://www.businesswire.com/news/home/20240729013275/pt"}, {"date": "2024.10", "title": "Recraft V3 发布并登顶文生图榜单", "desc": "Recraft V3 于 2024 年 10 月发布，官方称其在 Hugging Face 文生图榜连续 5 个月排名第一，成为其首个被广泛引用的设计向模型。", "source": "https://www.recraft.ai/docs/recraft-models/recraft-V3"}, {"date": "2025.10", "title": "微软发布首个自研图像模型 MAI-Image-1", "desc": "微软 AI 于 2025 年 10 月 13 日发布首个完全自研的文生图模型 MAI-Image-1，首次进入 LMArena 文生图前十，并于 2025 年 11 月起在 Bing Image Creator 上线，逐步替换此前的 DALL·E 系列。", "source": "https://microsoft.ai/news/introducing-mai-image-1-debuting-in-the-top-10-on-lmarena/"}, {"date": "2025.11.25", "title": "Black Forest Labs 发布 FLUX.2，确立写实领先地位", "desc": "FLUX.2 上线，主打光学物理级光照与材质/皮肤细节，评测中写实度与 Nano Banana Pro 相当或更高；形成 max/pro（API）与 flex/dev/klein（开放权重）的完整阶梯。", "source": "https://theairankings.com/best-ai-image-generator/"}, {"date": "2026.02", "title": "Pixelcut 更名 Pixa（2026.05 恢复 Pixelcut）", "desc": "Pixelcut 于 2026 年 2 月随平台扩展短暂更名 Pixa，5 月恢复原品牌。", "source": "https://www.pixelcut.ai/about-us"}, {"date": "2026.02", "title": "Recraft V4 发布", "desc": "Recraft 推出从头重建的 V4 模型，主打设计品味、提示词准确度与可放大到大幅面仍成立的输出质量。", "source": "https://www.recraft.ai/blog/introducing-recraft-v4-design-taste-meets-image-generation"}, {"date": "2026.02.26", "title": "Google 发布 Nano Banana 2（Gemini 3.1 Flash Image）", "desc": "Nano Banana 2 成为 Gemini App、AI Mode 与 Lens 的默认图像模型，覆盖 141 个国家，速度快于且成本低于 Nano Banana Pro，同时支撑了最慷慨的免费图像生成入口。", "source": "https://felloai.com/fr/is-nano-banana-free/"}, {"date": "2026.04", "title": "Freepik 整体更名 Magnific", "desc": "2026 年 4 月 28 日 Freepik 将公司与平台整体更名为 Magnific，把图库、Magnific 放大器与生成工具统一到 magnific.com，官方称 ARR 达 2.3 亿美元。", "source": "https://www.prnewswire.com/news-releases/freepik-becomes-magnific-hits-230m-arr-and-introduces-the-no-collar-creative-economy-302755376.html"}, {"date": "2026.04", "title": "Google Whisk 停运，能力并入 Flow", "desc": "Google Labs 的图生图重混工具 Whisk（2024 年 12 月上线）于 2026 年 4 月 30 日停运，功能与资产迁入 Google Flow，ImageFX、VideoFX 同期退役。", "source": "https://support.google.com/a/table/7314896?hl=en"}, {"date": "2026.06.03", "title": "Ideogram 4.0 发布（开源权重，9.3B 参数）", "desc": "Ideogram 转向开放权重与结构化生成：X-Omni 英文 OCR 得分 0.97、支持边界框版面控制、JSON 提示词、最多 16 个 HEX 色值锁定，最高 2K 输出。", "source": "https://morphic.com/zh/resources/models/ideogram-4"}, {"date": "2026.07.24", "title": "Midjourney V8.2 接替 V8.1 成为默认版本", "desc": "V8.1 于 2026-06-10 成为默认（提速约 5 倍、原生 2K、首次具备可用文字渲染），V8.2 于 2026-07-24 接替为默认；2026-08-27 上线支持最多 4 张参考图的角色一致性编辑模型。", "source": "https://docs.midjourney.com/hc/en-us/articles/27870484040333-Comparing-Midjourney-Plans"}, {"date": "2026.08.07", "title": "xAI 推出 Grok Imagine Image 2.0", "desc": "新版图像模型以 Quality Mode 上线 grok.com/imagine 及 iOS/Android 应用，API 模型名为 grok-imagine-image-2.0；支持魔法棒与分割编辑、去背景、最多 5 张参考图。", "source": "https://theairankings.com/best-ai-image-generator/"}, {"date": "2026.09.08", "title": "OpenAI 以 ChatGPT Images 2.5 替换 GPT Image 2（覆盖含免费的所有档位）", "desc": "ChatGPT 图像生成升级为 Images 2.5，宣称细节更锐利、光照更自然、参考图主体保持更好、多轮编辑更稳定且延迟最多降低 50%；开发者侧新增 gpt-image-2.5-flare 与 gpt-image-2.5-sunburst 两个模型，token 价格不变。", "source": "https://theairankings.com/best-ai-image-generator/"}];
+const FINDINGS = [{"t": "第一梯队：9 个对象评分 ≥ 8.0，自研模型厂商占 6 席", "p": "评分 ≥ 8.0 的依次是 OpenAI 图像 9.5、Google 图像 9.2、Midjourney 9.0、xAI Grok Imagine 8.9、FLUX 8.8、Ideogram 8.5、Krea 8.3、Recraft 8.3、Leonardo.AI 8.0。其中 6 个由模型厂商直接提供（OpenAI、Google、Midjourney、xAI、Black Forest Labs、Ideogram），另 3 个是多模型聚合与设计平台（Krea、Recraft、Leonardo.AI）——聚合平台的实际成图质量很大程度取决于用户选了哪个底层模型。"}, {"t": "免费是常态、无免费档是例外，最低付费门槛约 ¥21/月", "p": "21 个对象中 20 个提供完全免费 / 开源或免费额度，只有 Midjourney 写明「无免费档、无免费试用」。付费门槛最低的是社区与电商工具：SeaArt 入门 SVIP 约 ¥21/月、Photoroom Pro 年付约 ¥53/月、Pixelcut Pro 约 ¥57/月；头部模型的订阅集中在 ¥57–¥142/月（ChatGPT Go ¥57、Plus ¥142，Google AI Pro ¥142），Midjourney 从 Basic ¥71/月起直到 Mega ¥852/月。按张计费的 API 落差更大：FLUX [klein] 约 ¥0.10/张起、Stability SD3.5 Large 约 ¥0.46/张，而 OpenAI 的图像输出按 token 计约 ¥213/1M token。"}, {"t": "三处需要更新的旧印象，以及 25 项待确认", "p": "本轮核验纠正了三处仍在流传的过时认知：Google Whisk 已于 2026 年 4 月 30 日停止运营、能力并入 Google Flow；Freepik 于 2026 年 4 月 28 日把公司与平台整体更名为 Magnific；Bing Image Creator 自 2025 年 10 月起改用微软自研 MAI-Image 系列，官方称现已 100% 使用自研模型。另有 25 项因官方页面无法核验或来源相互冲突而列入待确认，其中「中文（非拉丁文字）图内文字渲染能力」在本批产品的官方页面与文档中均无公示数据。"}];
+
+/* ================= 渲染 ================= */
+function esc(s){
+  return String(s==null?"":s)
+    .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;").replace(/'/g,"&#39;");
+}
+function isFreeAvail(p){ return p.avail==="free" || p.avail==="mixed"; }
+
+function renderStats(){
+  const scored = PRODUCTS.filter(p=>p.score && p.score.value!=null);
+  const top = scored.filter(p=>p.score.value>=8.0).length;
+  const freeCount = PRODUCTS.filter(p=>isFreeAvail(p)).length;
+  const el = document.getElementById('stats');
+  el.innerHTML = [
+    [PRODUCTS.length, "可评分产品与模型"],
+    [top, "评分 ≥ 8.0 的第一梯队"],
+    [freeCount, "含完全免费或免费额度"],
+    [PENDING.length, "待确认条目"]
+  ].map(c=>`<div class="cell"><div class="num">${c[0]}</div><div class="lbl">${c[1]}</div></div>`).join('');
+}
+
+function renderFindings(){
+  const el = document.getElementById('findings');
+  el.innerHTML = FINDINGS.map(f=>`<div class="f"><p class="t">${esc(f.t)}</p><p>${esc(f.p)}</p></div>`).join('');
+}
+
+function renderTable(){
+  const tbody = document.getElementById('mainTable');
+  tbody.innerHTML = PRODUCTS.map(p=>{
+    const scoreHtml = (p.score && p.score.value!=null)
+      ? `<span class="score">${p.score.value}</span><span class="note-inline">${esc(p.score.range?"区间 "+p.score.range:"待确认")}</span>`
+      : `<span class="score na">—</span>`;
+    const tagCls = p.avail==="free"?"tag free":(p.avail==="paid"?"tag paid":"tag");
+    const tag = `<span class="${tagCls}">${esc(p.avail==="free"?"免费/开源":(p.avail==="paid"?"付费":(p.avail==="mixed"?"免费+付费":"待确认")))}</span>`;
+    const typeHtml = `<span class="tag" style="display:block">${esc(p.type||"待确认")}</span>`;
+    const link = p.official_url
+      ? `<a class="ext" href="${esc(p.official_url)}">${esc(p.official_url_label||p.official_url)}</a>`
+      : `<span class="note-inline">待确认</span>`;
+    const price = p.price_cny || (p.price_usd ? "待确认" : "待确认");
+    return `<tr>
+      <td data-label="产品 / 开发方"><span class="pname">${esc(p.name)}</span><span class="dev">${esc(p.developer)}</span></td>
+      <td data-label="评分">${scoreHtml}</td>
+      <td data-label="类型 / 官方入口">${typeHtml}${tag}${link}</td>
+      <td data-label="免费额度">${esc(p.free_quota)}</td>
+      <td data-label="价格">${esc(price)}${p.price_usd?`<br><span class="note-inline">原价 ${esc(p.price_usd)}</span>`:""}</td>
+      <td data-label="特点与局限"><strong>特点：</strong>${esc(p.strengths)}<br><strong>局限：</strong>${esc(p.limitations)}</td>
+    </tr>`;
+  }).join('');
+  document.getElementById('tableCaption').textContent = `共 ${PRODUCTS.length} 项。评分区间口径：${PRODUCTS.filter(p=>p.score&&p.score.range).map(p=>p.name+" "+p.score.range).slice(0,3).join("；")}${PRODUCTS.length>3?" 等":""}；评分依据见第 03 节与信源索引。`;
+}
+
+function renderScoreChart(){
+  const list = PRODUCTS.filter(p=>p.score && p.score.value!=null).sort((a,b)=>b.score.value-a.score.value);
+  const el = document.getElementById('chartScore');
+  el.innerHTML = list.map(p=>{
+    const w = Math.max(3, Math.round(p.score.value*10));
+    const cls = isFreeAvail(p) ? "" : " paid";
+    return `<div class="hbar"><div class="hbar-label">${esc(p.name)}</div><div class="hbar-track"><div class="hbar-fill${cls}" style="width:${w}%"></div></div><div class="hbar-val">${p.score.value}</div></div>`;
+  }).join('');
+  document.getElementById('chartScoreTitle').textContent = `${list.length} 个对象的综合质量评分（满分 10）`;
+  const basis = list.map(p=>`${p.name}(${p.score.value})：${p.score.basis||""}`).join("；");
+  document.getElementById('chartScoreCaption').textContent = "评分依据："+basis;
+}
+
+function renderTypeChart(){
+  const counts = {};
+  PRODUCTS.forEach(p=>{
+    (p.type||"").replace(/（[^）]*）/g,"").split(/[·＋+、，,/]/).forEach(t=>{
+      t=t.replace(/^\s+|\s+$/g,"");
+      if(t) counts[t]=(counts[t]||0)+1;
+    });
+  });
+  const rows = Object.entries(counts).sort((a,b)=>b[1]-a[1]);
+  const el = document.getElementById('chartType');
+  const max = rows.length?rows[0][1]:1;
+  el.innerHTML = rows.map(r=>{
+    const w = Math.max(3, Math.round(r[1]/max*100));
+    return `<div class="hbar"><div class="hbar-label">${esc(r[0])}</div><div class="hbar-track"><div class="hbar-fill" style="width:${w}%"></div></div><div class="hbar-val">${r[1]}</div></div>`;
+  }).join('') || '<p class="note-inline">无数据</p>';
+}
+
+function renderFreeChart(){
+  const c = {free:0,mixed:0,paid:0,unknown:0};
+  PRODUCTS.forEach(p=>{ const k=p.avail||"unknown"; if(k in c) c[k]++; else c.unknown++; });
+  const labels = {free:"完全免费 / 开源",mixed:"免费额度 + 付费双轨",paid:"仅付费",unknown:"无法确认"};
+  const rows = Object.keys(labels).map(k=>[labels[k],c[k]]);
+  const max = Math.max(1,...rows.map(r=>r[1]));
+  const el = document.getElementById('chartFree');
+  el.innerHTML = rows.map(r=>{
+    const w = Math.max(3, Math.round(r[1]/max*100));
+    return `<div class="hbar"><div class="hbar-label">${esc(r[0])}</div><div class="hbar-track"><div class="hbar-fill" style="width:${w}%"></div></div><div class="hbar-val">${r[1]}</div></div>`;
+  }).join('');
+}
+
+function renderTimeline(){
+  const el = document.getElementById('timeline');
+  if(!TIMELINE.length){
+    document.getElementById('timelineCaption').textContent = "本轮未收录到可靠的关键节点时间线数据。";
+    return;
+  }
+  el.innerHTML = TIMELINE.map((t,i)=>{
+    const hot = (i===TIMELINE.length-1) ? " hot" : "";
+    const src = t.source?` <a class="ext" href="${esc(t.source)}">来源</a>`:"";
+    return `<div class="tnode${hot}"><div class="when">${esc(t.date)}</div><div class="axis"><i class="dot"></i></div><div class="body"><p class="what">${esc(t.title)}</p><p class="why">${esc(t.desc)}${src}</p></div></div>`;
+  }).join('');
+}
+
+function renderExcluded(){
+  const tbody = document.getElementById('excludedTable');
+  tbody.innerHTML = EXCLUDED.map(e=>`<tr>
+    <td data-label="产品 / 类型"><span class="pname">${esc(e.name)}</span><span class="dev">${esc(e.type||"")}</span></td>
+    <td data-label="排除理由">${esc(e.reason)}</td>
+  </tr>`).join('') || '<tr><td colspan="2"><span class="note-inline">本轮无排除项。</span></td></tr>';
+}
+
+function renderSources(){
+  const el = document.getElementById('sourceIndex');
+  el.innerHTML = PRODUCTS.map(p=>{
+    const links = (p.sources||[]).map((s,i)=>`<a class="ext" href="${esc(s)}">${i+1}. ${esc(s)}</a>`).join("<br>");
+    return `<div class="srcgrp"><h3>${esc(p.name)}</h3><ul class="srclist"><li class="srcitem"><span class="srclabel">信源 ${(p.sources||[]).length} 条</span><span class="srcbody">${links||'<span class="note-inline">无可用信源（待确认）</span>'}</span></li></ul></div>`;
+  }).join('');
+}
+
+function renderTodo(){
+  const el = document.getElementById('todoList');
+  el.innerHTML = PENDING.map((t,i)=>`<div class="t"><span class="n">${i+1}</span><span class="c">${esc(t.item)}<br><b>${esc(t.reason)}</b></span></div>`).join('') || '<p class="note-inline">本轮无待确认项。</p>';
+}
+
+renderStats(); renderFindings(); renderTable(); renderScoreChart();
+renderTypeChart(); renderFreeChart(); renderTimeline();
+renderExcluded(); renderSources(); renderTodo();
+</script>
+</body>
+</html>

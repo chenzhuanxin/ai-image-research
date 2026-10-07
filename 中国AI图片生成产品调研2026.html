@@ -1,0 +1,475 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>中国 AI 图片生成产品与模型调研（2026 年 10 月）</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%2312564C'/%3E%3Cpath d='M7 22l5-9 4 6 3-4 6 7' fill='none' stroke='%23fff' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='23.4' cy='9.4' r='2.6' fill='%23C4762A'/%3E%3C/svg%3E">
+<style>
+:root{
+  --ink:#1F2329;
+  --ink-2:#646A73;
+  --ink-3:#8A939B;
+  --line:#DEE3E8;
+  --line-2:#EDF1F4;
+  --primary:#12564C;
+  --primary-soft:#E8F0EE;
+  --accent:#C4762A;
+  --accent-soft:#FAEFE3;
+  --bg:#FFFFFF;
+  --bg-soft:#F7F9FA;
+  --serif:"Songti SC","STSong","SimSun",Georgia,"Microsoft YaHei",serif;
+  --sans:"PingFang SC","Microsoft YaHei","Noto Sans SC",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;background:var(--bg);color:var(--ink);
+  font-family:var(--sans);font-weight:400;font-size:16px;line-height:1.78;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1120px;margin:0 auto;padding:0 28px;}
+
+/* ===== 报头 ===== */
+.masthead{border-bottom:2px solid var(--ink);padding:56px 0 22px;margin-bottom:0;}
+.kicker{
+  font-size:13px;letter-spacing:.14em;color:var(--primary);
+  font-weight:700;margin:0 0 18px;text-transform:none;
+}
+h1.title{
+  font-family:var(--serif);font-weight:900;
+  font-size:clamp(28px,4.6vw,50px);line-height:1.22;letter-spacing:-.01em;
+  margin:0 0 16px;max-width:20em;
+}
+.subtitle{font-size:17px;color:var(--ink-2);margin:0 0 26px;max-width:44em;line-height:1.7;}
+.meta-row{
+  display:flex;flex-wrap:wrap;gap:10px 34px;font-size:13.5px;color:var(--ink-2);
+  border-top:1px solid var(--line);padding-top:14px;
+}
+.meta-row b{color:var(--ink);font-weight:700;}
+
+.strip{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:0;
+  border-bottom:1px solid var(--line);margin-bottom:0;
+}
+.strip .cell{padding:22px 22px 22px 0;border-right:1px solid var(--line-2);}
+.strip .cell:last-child{border-right:0;}
+.strip .num{
+  font-family:var(--serif);font-weight:700;font-size:clamp(22px,3.1vw,34px);
+  color:var(--primary);line-height:1.1;font-variant-numeric:tabular-nums;
+}
+.strip .lbl{font-size:13px;color:var(--ink-2);margin-top:7px;line-height:1.55;}
+
+/* ===== 章节 ===== */
+section{padding:54px 0 8px;border-bottom:1px solid var(--line-2);}
+section:last-of-type{border-bottom:0;}
+h2.sec{
+  font-family:var(--serif);font-weight:700;font-size:clamp(21px,2.6vw,28px);
+  margin:0 0 8px;line-height:1.3;display:flex;gap:14px;align-items:baseline;
+}
+h2.sec .no{
+  font-size:13px;font-weight:700;color:var(--accent);letter-spacing:.08em;
+  font-variant-numeric:tabular-nums;flex:none;padding-top:6px;
+}
+.lede{font-size:16.5px;color:var(--ink-2);max-width:46em;margin:0 0 26px;line-height:1.8;}
+p{margin:0 0 16px;}
+h3{font-family:var(--serif);font-weight:600;font-size:18.5px;margin:30px 0 12px;}
+
+/* ===== 表格 ===== */
+.tablewrap{overflow-x:auto;margin:0 0 10px;border:1px solid var(--line);}
+table{border-collapse:collapse;width:100%;table-layout:fixed;min-width:940px;}
+thead th{
+  background:var(--bg-soft);text-align:left;font-weight:700;font-size:13.5px;
+  color:var(--ink-2);padding:12px 14px;border-bottom:1px solid var(--line);
+  vertical-align:bottom;line-height:1.5;
+}
+tbody td{
+  padding:14px;border-bottom:1px solid var(--line-2);vertical-align:top;
+  font-size:14px;line-height:1.68;overflow-wrap:anywhere;
+}
+tbody tr:last-child td{border-bottom:0;}
+tbody tr:hover{background:#FCFDFD;}
+.pname{font-weight:700;font-size:14.5px;}
+.dev{display:block;color:var(--ink-3);font-size:12.5px;margin-top:3px;line-height:1.5;}
+.score{
+  font-family:var(--serif);font-weight:700;font-size:19px;color:var(--primary);
+  font-variant-numeric:tabular-nums;display:block;
+}
+.score.na{color:var(--ink-3);font-size:15px;}
+a{color:var(--primary);text-decoration:none;border-bottom:1px solid rgba(18,86,76,.35);}
+a:hover{border-bottom-color:var(--primary);}
+a.ext::after{content:"↗";font-size:.78em;vertical-align:.18em;margin-left:2px;color:var(--ink-3);}
+.note-inline{color:var(--ink-3);font-size:12.5px;}
+.tag{
+  display:inline-block;font-size:12px;font-weight:700;line-height:1.5;
+  padding:1px 8px;border:1px solid var(--line);color:var(--ink-2);
+  background:var(--bg-soft);margin-bottom:6px;
+}
+.tag.free{color:#fff;background:var(--primary);border-color:var(--primary);}
+.tag.paid{color:#7A4712;background:var(--accent-soft);border-color:#E7D2B8;}
+
+/* ===== 图表（纯 CSS 条形图，无外部依赖） ===== */
+.chart-card{border:1px solid var(--line);padding:22px 20px 14px;margin:0 0 10px;background:var(--bg);}
+.chart-title{font-family:var(--serif);font-weight:600;font-size:16.5px;margin:0 0 4px;}
+.chart-sub{font-size:13px;color:var(--ink-2);margin:0 0 14px;line-height:1.62;}
+.chart{width:100%;}
+.caption{font-size:12.5px;color:var(--ink-3);line-height:1.7;margin:6px 0 0;}
+.hbar{display:grid;grid-template-columns:180px 1fr 44px;gap:10px;align-items:center;margin-bottom:9px;}
+.hbar-label{font-size:13.5px;font-weight:600;color:var(--ink);text-align:right;overflow-wrap:anywhere;line-height:1.4;}
+.hbar-track{background:var(--line-2);height:20px;border-radius:3px;overflow:hidden;}
+.hbar-fill{height:100%;background:var(--primary);border-radius:3px;min-width:2px;}
+.hbar-fill.paid{background:var(--accent);}
+.hbar-val{font-family:var(--serif);font-weight:700;font-size:14px;color:var(--ink);font-variant-numeric:tabular-nums;}
+
+/* ===== 结论块 ===== */
+.findings{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:1px solid var(--line);}
+.findings .f{padding:24px 24px 8px 0;border-right:1px solid var(--line-2);}
+.findings .f:last-child{border-right:0;padding-right:0;}
+.findings .f .t{font-family:var(--serif);font-weight:700;font-size:16.5px;margin:0 0 8px;line-height:1.5;}
+.findings .f p{font-size:14px;color:var(--ink-2);line-height:1.72;margin:0;}
+
+/* ===== 时间线 ===== */
+.timeline{margin:6px 0 0;position:relative;}
+.timeline::before{
+  content:"";position:absolute;top:11px;bottom:11px;
+  left:116.5px;width:1px;background:var(--line);
+}
+.tnode{display:grid;grid-template-columns:104px 26px 1fr;align-items:start;}
+.tnode .when{
+  font-size:13px;font-weight:700;color:var(--primary);text-align:right;
+  padding-right:10px;line-height:22px;font-variant-numeric:tabular-nums;
+}
+.tnode .axis{display:flex;justify-content:center;}
+.tnode .dot{position:relative;z-index:1;width:10px;height:10px;border-radius:50%;background:#fff;border:2px solid var(--primary);margin-top:6px;}
+.tnode.hot .dot{background:var(--accent);border-color:var(--accent);}
+.tnode .body{padding:0 0 22px 14px;}
+.tnode:last-child .body{padding-bottom:0;}
+.tnode .what{font-weight:700;font-size:15px;margin:0 0 3px;line-height:1.55;}
+.tnode .why{font-size:14px;color:var(--ink-2);margin:0;line-height:1.7;}
+
+/* ===== 待确认 ===== */
+.todo{border-top:1px solid var(--line);}
+.todo .t{display:grid;grid-template-columns:34px 1fr;gap:12px;padding:14px 0;border-bottom:1px solid var(--line-2);}
+.todo .t .n{font-family:var(--serif);font-weight:700;color:var(--accent);font-variant-numeric:tabular-nums;font-size:15px;}
+.todo .t .c{font-size:14px;line-height:1.72;color:var(--ink);}
+.todo .t .c b{font-weight:700;}
+
+/* ===== 信源索引 ===== */
+.srcgrp{margin-bottom:28px;}
+.srcgrp h3{margin-top:0;}
+.srclist{margin:0;padding:0;}
+.srcitem{display:grid;grid-template-columns:112px 1fr;gap:12px;margin-bottom:12px;list-style:none;}
+.srclabel{font-size:12.5px;color:var(--ink-3);font-weight:700;line-height:1.6;}
+.srcbody{font-size:14px;line-height:1.7;overflow-wrap:anywhere;}
+.srcfield{display:block;margin-top:2px;font-size:12.5px;color:var(--ink-3);}
+
+footer{padding:34px 0 56px;color:var(--ink-3);font-size:13px;line-height:1.8;}
+footer b{color:var(--ink-2);}
+
+@media (max-width:960px){
+  .strip{grid-template-columns:repeat(2,1fr);}
+  .strip .cell:nth-child(2){border-right:0;}
+  .strip .cell{border-bottom:1px solid var(--line-2);padding-right:16px;}
+  .strip .cell:nth-child(3),.strip .cell:nth-child(4){border-bottom:0;}
+  .findings{grid-template-columns:1fr;}
+  .findings .f{border-right:0;border-bottom:1px solid var(--line-2);padding:20px 0 14px;}
+  .findings .f:last-child{border-bottom:0;}
+  .tablewrap{border:0;overflow:visible;}
+  table{min-width:0;table-layout:auto;display:block;}
+  thead{display:none;}
+  tbody{display:block;}
+  tbody tr{display:block;border:1px solid var(--line);margin-bottom:14px;padding:4px 0;}
+  tbody td{display:grid;grid-template-columns:88px 1fr;gap:10px;border-bottom:1px solid var(--line-2);padding:10px 14px;font-size:13.5px;}
+  tbody td:last-child{border-bottom:0;}
+  tbody td::before{
+    content:attr(data-label);font-size:12.5px;color:var(--ink-3);font-weight:700;line-height:1.6;
+  }
+  .hbar{grid-template-columns:120px 1fr 40px;gap:8px;}
+  .hbar-label{font-size:12.5px;text-align:left;}
+  .tnode{grid-template-columns:78px 20px 1fr;}
+  .tnode .when{font-size:12px;padding-right:7px;}
+  .tnode .body{padding-left:10px;}
+  .timeline::before{left:87.5px;}
+  .meta-row{font-size:14px;}
+  .strip .lbl{font-size:13.5px;}
+  .findings .f p{font-size:14.5px;}
+  tbody td{font-size:14.5px;grid-template-columns:98px 1fr;}
+  tbody td::before{font-size:13px;}
+  .dev{font-size:14px;}
+  .tablewrap a.ext{display:inline-block;padding:10px 0;}
+  .srcitem{grid-template-columns:1fr;gap:2px;}
+  .srclabel{font-size:13px;}
+  .srcbody{font-size:14.5px;}
+  .kicker{font-size:14px;}
+  .strip .lbl{font-size:14px;}
+  .tag{font-size:14px;}
+  h2.sec .no{font-size:14px;}
+}
+@media (max-width:520px){
+  .wrap{padding:0 16px;}
+  .tnode{grid-template-columns:66px 16px 1fr;}
+  .timeline::before{left:73.5px;}
+  .hbar{grid-template-columns:1fr;gap:4px;}
+  .hbar-label{text-align:left;}
+  .hbar-val{font-size:13px;}
+}
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wrap">
+    <p class="kicker">国产 AI 图片调研 · 2026 年 10 月口径</p>
+    <h1 class="title">中国 AI 图片生成产品与模型调研</h1>
+    <p class="subtitle">覆盖 19 个可评分对象：谁在做、能免费用多少、会员卖多少钱、生成质量处在什么水位。所有数字与网址均附可追溯来源。</p>
+    <div class="meta-row">
+      <span>数据口径：<b>截至 2026-10-07</b></span>
+      <span>计价货币：<b>人民币（CNY）</b></span>
+      <span>信源交叉：<b>官方站点 / 科技媒体 / 用户社区</b></span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="strip" id="stats"></div>
+</div>
+
+<main class="wrap">
+
+<section>
+  <h2 class="sec"><span class="no">01</span>核心结论</h2>
+  <p class="lede">19 个可评分对象里，16 个走「免费额度 + 付费订阅」双轨，6 个进入评分 ≥8.0 的第一梯队：即梦AI 9.0、豆包图片生成 8.8、通义万相 8.7、腾讯混元生图 8.5、HiDream 智象未来 8.5、LiblibAI 8.0——前四席由字节（2 席）、阿里、腾讯三家大厂的自研模型占据。计价分成两条线：API 侧按张计费已压到 MiniMax image-01 ¥0.025/张、智谱 CogView-4 ¥0.06/次、腾讯混元生图 ¥0.2/张；消费端订阅则从醒图会员 ¥18–28/月，一路铺到可灵黑金 ¥1149/月、LiblibAI 尊享版 ¥22999/年。与此同时，文心一格不再独立运营、可图平台于 2024-08-23 关闭、阶跃星辰 Step-1X 图像接口公告于 2026-10-10 下线——供给正在向少数头部模型收敛。</p>
+  <div class="findings" id="findings"></div>
+</section>
+
+<section>
+  <h2 class="sec"><span class="no">02</span>产品字段总表</h2>
+  <p class="lede">同一行回答同一组问题：谁开发的、去哪用、免费用多少、会员多少钱、质量与短板在哪。评分为主观共识评分，非厂商指标。</p>
+  <div class="tablewrap">
+    <table>
+      <colgroup>
+        <col style="width:15%"><col style="width:8%"><col style="width:13%">
+        <col style="width:20%"><col style="width:20%"><col style="width:24%">
+      </colgroup>
+      <thead>
+        <tr>
+          <th>产品 / 开发方</th>
+          <th>评分</th>
+          <th>类型 / 官方入口</th>
+          <th>免费额度</th>
+          <th>价格</th>
+          <th>特点与局限</th>
+        </tr>
+      </thead>
+      <tbody id="mainTable"></tbody>
+    </table>
+  </div>
+  <p class="caption" id="tableCaption"></p>
+</section>
+
+<section>
+  <h2 class="sec"><span class="no">03</span>生成质量评分对比</h2>
+  <p class="lede">评分为主观共识评分，由作者综合科技媒体评测结论与用户社区口碑给出，满分 10 分。维度权重：图像质量与美学 30%、文字渲染 20%、中文/多语言支持 15%、编辑可控性 20%、速度与成本 15%。</p>
+  <div class="chart-card">
+    <p class="chart-title" id="chartScoreTitle"></p>
+    <p class="chart-sub">颜色区分获取门槛：深青为可免费使用（含开源与免费额度），赭色为以付费订阅或 API 调用为主。</p>
+    <div class="chart" id="chartScore"></div>
+    <p class="caption" id="chartScoreCaption"></p>
+  </div>
+</section>
+
+<section>
+  <h2 class="sec"><span class="no">04</span>类型与获取门槛的格局</h2>
+  <p class="lede">把产品按能力类型与免费/付费格局分组，可以看出市场供给结构：文生图、图生图编辑、设计平台内置、社区/开源生态各自站了多少坑位。</p>
+  <div class="chart-card">
+    <p class="chart-title">能力类型分布</p>
+    <p class="chart-sub">按产品 type 字段原文分词计数（多类型产品重复计数）。</p>
+    <div class="chart" id="chartType"></div>
+  </div>
+  <div class="chart-card">
+    <p class="chart-title">免费与付费格局</p>
+    <p class="chart-sub">free=完全免费或开源；mixed=有免费额度且带付费双轨；paid=无免费档仅付费；unknown=无法确认。</p>
+    <div class="chart" id="chartFree"></div>
+  </div>
+</section>
+
+<section>
+  <h2 class="sec"><span class="no">05</span>2025—2026 关键节点</h2>
+  <p class="lede">按公开可查的发布、上线与接口策略变化时点排列，用于理解竞争格局是怎么形成的。</p>
+  <div class="timeline" id="timeline"></div>
+  <p class="caption" id="timelineCaption"></p>
+</section>
+
+<section>
+  <h2 class="sec"><span class="no">06</span>排除清单（未纳入主表的产品）</h2>
+  <p class="lede">考察过但未纳入主表的产品：纯视频生成、纯 3D 建模、停止运营、或信息无法核实者，如实列出。</p>
+  <div class="tablewrap">
+    <table>
+      <colgroup><col style="width:24%"><col style="width:76%"></colgroup>
+      <thead>
+        <tr><th>产品 / 类型</th><th>排除理由</th></tr>
+      </thead>
+      <tbody id="excludedTable"></tbody>
+    </table>
+  </div>
+</section>
+
+<section>
+  <h2 class="sec"><span class="no">07</span>信源索引</h2>
+  <p class="lede">按产品分组，逐条列出全部信源 URL。三类信源交叉验证：官方站点、科技媒体、用户社区。</p>
+  <div id="sourceIndex"></div>
+</section>
+
+<section>
+  <h2 class="sec"><span class="no">08</span>待确认与无法核实项</h2>
+  <p class="lede">以下条目在本轮公开检索范围内无法取得可靠官方口径，如实列出，未作推测填补。</p>
+  <div class="todo" id="todoList"></div>
+</section>
+
+<footer>
+  <p><b>方法与免责：</b>本报告信息采集截止北京时间 2026 年 10 月 7 日，全部价格以人民币计（海外产品引用定价时另注美元原值并约合）。"生成图像质量评分"为主观共识评分，由作者综合科技媒体评测结论与用户社区口碑给出，非厂商官方指标，也不等同于客观基准测试；同一产品在不同画风与题材下表现差异较大。价格与免费额度变动频繁，正式采购前请以厂商官方页面为准。</p>
+</footer>
+
+<script>
+/* ================= 数据（由 data.json 映射；严禁改动字段语义） ================= */
+const REGION = "cn";
+const PRODUCTS = [{"name":"即梦AI（图片生成，Seedream 4.0 / 5.0 Lite / 5.0 Pro 等）","developer":"字节跳动（运营主体：深圳市脸萌科技有限公司）","type":"文生图 + 图生图编辑（参考图生图、局部重绘、扩图/消除、智能画布、多图融合、图层分离），并含视频生成","score":{"value":9.0,"range":"8.5-9.3","basis":"底层 Seedream 5.0 Pro 位列国产第一梯队——SuperCLUE-Image（2026-08）Doubao-Seedream-5.0-pro 91.93 分居国产品牌第 2，Arena.ai 文生图总榜（2026-09-24）第 10，Artificial Analysis 文生图榜（2026-10）Seedream 5.0 Pro 约 1081 Elo；第三方工具名录 RECATOOLS（2026-10-02）给出 7.5/10 并称其可在同一平台调用 Sora 2、Veo 3.1、Nano Banana Pro 等竞品模型。"},"official_url":"https://jimeng.jianying.com","official_url_label":"即梦AI 官网（一站式 AI 创作平台）","free_quota":"每日登录即梦AI可获随机数量的免费积分/额度，当日 24:00 清零（官方《即梦AI积分规则》）；免费用户生成作品带品牌水印，图片 5.0 Pro 等高级模型仅会员可用。","price_cny":"会员（连续包月）：基础会员 ¥69/月、连续包年 ¥659/年（新客首月优惠 ¥33）；媒体与第三方记录另有标准会员 ¥199/月、高级会员 ¥499/月等更高档位（App Store 官方页仅公示基础档，高档位以 App 内订阅页为准）。积分充值：500 积分 ¥50、750 积分 ¥75、1500 积分 ¥150、2250 积分 ¥225、4500 积分 ¥450、9000 积分 ¥900（有效期 2 年）。","price_usd":"海外版 Dreamina 按区域定价（第三方名录记录新加坡档 Basic S$20/月、Standard S$46/月，免费用户每日 120 credits 且带水印），官方未公示统一美元价，待确认。","strengths":"国内少数把「生成+编辑」做成完整工作流的平台：Seedream 5.0 Pro 支持点选/圈选/草图/图层分离等交互式精准编辑，并原生集成 Sora 2、Veo 3.1、Nano Banana Pro 等外部模型，图片、视频、Agent 一站式。","limitations":"免费档有水印且高级模型（图片 5.0 Pro）限会员；积分消耗快、高峰排队明显（媒体实测高峰时段生成 5–10 秒视频需排队 2–8 小时），会员分档多、年费上探高。","avail":"mixed","sources":["https://jimeng.jianying.com","https://lf26-cdn-tos.draftstatic.com/obj/ies-hotsoon-draft/dreamina/bbb8a810-1fd5-4962-a24a-9b01acd3dec4.html","https://seed.bytedance.com/zh/blog/beyond-generation-it-understands-design-introducing-seedream-5-0-pro","https://36kr.com/p/3718471239038593","https://recatools.com/ai-directory/jimeng-dreamina/"]},{"name":"豆包图片生成（豆包 App / 网页端「AI 生图·图片生成」，当前接入 Seedream 5.0 Pro）","developer":"字节跳动","type":"文生图 + 图生图编辑（对话式生图、参考图生图、图片编辑），作为通用 AI 助手的生成能力内置","score":{"value":8.8,"range":"8.3-9.1","basis":"调用与即梦同源的字节 Seedream 系列（官方博客确认入口为「豆包 App/电脑版-AI 创作-图片生成-选择模型 Seedream 5.0 Pro」），SuperCLUE-Image（2026-08）Doubao-Seedream-5.0-pro 91.93 分居国产第 2；HKU 商学院图像生成评测中豆包在图像修订任务排名第一。"},"official_url":"https://www.doubao.com","official_url_label":"豆包 官网 / Web 端","free_quota":"免费版可用：图片生成属「高级功能」，官方口径为每日有一定免费次数、用完当日暂停、次日重置（具体张数官方未公示）；免费用户可在额度内体验接入豆包 2.1 Turbo 的办公任务模式。","price_cny":"豆包专业版三档（官方 2026-06-24 上线）：标准套餐连续包月 ¥68/月（连续包年 ¥688）、加强套餐 ¥200/月（连续包年 ¥2,048）、高级套餐 ¥500/月（连续包年 ¥5,088）；单次购买分别为 ¥80/月、¥240/月、¥599/月。学生认证后标准套餐 ¥38/月。图片生成与视频生成、AI PPT 等共享同一月度额度池。","price_usd":"","strengths":"零门槛：在通用助手对话框里直接生图/改图，无需另装产品；与豆包 2.1 Pro 的办公任务、PPT、数据分析打通，中文语义理解与中文字渲染承袭字节 Seedream 的强项。","limitations":"不是独立创作工具——缺少专业级的尺寸/比例/种子等参数控制与图层级编辑；免费次数偏少，付费额度与视频等重算力功能共享，重度创作用户不如直接用即梦划算。","avail":"mixed","sources":["https://www.doubao.com","https://www.stdaily.com/web/gdxw/2026-06/24/content_536585.html","https://m.gmw.cn/toutiao/2026-06/24/content_1304508107.htm","https://seed.bytedance.com/zh/blog/beyond-generation-it-understands-design-introducing-seedream-5-0-pro"]},{"name":"剪映 / 醒图 AI（剪映「AI 创作」与醒图 App 的 AI 修图、AI 写真）","developer":"字节跳动（深圳市脸萌科技有限公司）","type":"设计·剪辑平台内置 AI 生图 + 修图增强（AI 作图、AI 消除/扩图、人像美化、AI 写真）","score":{"value":7.0,"range":"6.3-7.8","basis":"定位为大众化编辑/修图工具而非 SOTA 生成模型，未进入 SuperCLUE-Image、Artificial Analysis 等文生图榜单；口碑主要来自 App Store 官方评分（醒图 4.8/5、剪映套装 3.7/5、剪映专业版 2.5/5）与社区对其美颜与修图易用性的评价。"},"official_url":"https://www.capcut.cn","official_url_label":"剪映 官网（国际版 CapCut：capcut.com）","free_quota":"剪映/醒图的基础剪辑与修图功能免费；AI 作图、AI 写真等增值能力部分需会员，官方未单列 AI 作图的免费额度，待确认。","price_cny":"剪映会员：连续包月 ¥79、连续包年 ¥758（含 1TB 个人云空间），App 内另见 ¥25/¥30 月档与 ¥188/年 等口径；剪映 SVIP ¥59/月。云空间：10G ¥3/月·¥30/年，100G ¥6/月·¥60/年，1000G ¥18/月·¥178/年。醒图会员：连续包月 ¥18–28、连续包年 ¥108，另设醒图 VIP ¥15/月、SVIP ¥28/月（以上均为 App Store 官方内购口径）。","price_usd":"","strengths":"与剪辑/修图工作流零切换，模板化程度高、上手快；醒图的人像美化与 AI 写真在短视频创作者中渗透率高，可一键套用平台内爆款模板，性价比优于专业订阅。","limitations":"生成质量上限明显低于专用文生图产品，更像「AI 辅助编辑」而非创作引擎；AI 能力分散在多个子入口，官方未公示清晰的 AI 作图免费额度与计费规则；剪映 App Store 评分偏低（2.5–3.7）。","avail":"mixed","sources":["https://www.capcut.cn","https://apps.apple.com/cn/app-bundle/%E8%A7%86%E9%A2%91%E5%89%AA%E8%BE%91%E5%92%8C%E5%9B%BE%E7%89%87%E7%B2%BE%E4%BF%AE%E5%A5%97%E8%A3%85/id1650552970","https://apps.apple.com/cn/app/%E9%86%92%E5%9B%BE-%E6%8B%8D%E7%85%A7-%E4%BF%AE%E5%9B%BE-%E4%BF%AElive%E7%A5%9E%E5%99%A8/id1500526240"]},{"name":"通义万相（万相官网 / 阿里云百炼 API，含 Wan 2.x 与 Qwen-Image 3.0 系列）","developer":"阿里巴巴（阿里云 · 通义实验室）","type":"文生图 + 图生图编辑（局部编辑、扩图、图像翻译等通用图像编辑）+ 开源模型 + API","score":{"value":8.7,"range":"8.2-9.0","basis":"Qwen-Image-3.0-Pro 在 SuperCLUE-Image（2026-08）91.6 分居国产并列第 2，Artificial Analysis 文生图榜（2026-10）位列国产第一（约 1089 Elo）；Wan2.6-T2I 在 Arena.ai 文生图总榜约第 39，开发者社区对其开源生态与中文文字渲染评价较高。"},"official_url":"https://tongyi.aliyun.com/wan/","official_url_label":"万相官网（通义·万相，AI 图像与视频生成）","free_quota":"阿里云百炼为新用户提供按模型的一次性免费额度（通义万相文生图/图像编辑系列约 100–500 张不等，官方计费页按模型列出）；消费端通义 App 可免费使用并含每日额度。数值随活动调整，以百炼/通义页面为准。","price_cny":"阿里云百炼按张计费：通义万相文生图约 ¥0.20/张起（wan2.1、wan2.6-image 等 0.20 元/张；wan2.5-t2i-preview 0.30 元/张；wan2.7-image-pro、qwen-image-2.0-pro 0.50 元/张），通用图像编辑约 0.20–0.70 元/张。消费端通义 App 以免费+会员订阅为主，会员价未公示，待确认。","price_usd":"待确认（国际站按量计费；第三方评测站记录 Qwen-Image-3.0-Pro 约 $40/千张、Wan2.6-T2I 约 $30/千张，非官方公示价）。","strengths":"国内开源生态最强的一家：Wan 系列与 Qwen-Image 系列均开源可自部署，API 单价低至 0.2 元/张档，中文文字渲染与指令遵循口碑好，覆盖文生图/图生图/编辑/视频全栈。","limitations":"消费端入口分散（通义 App、万相官网、百炼 API 三套体验），C 端订阅与免费额度公示不清晰；旗舰型号（qwen-image-2.0-pro、wan2.7-image-pro）单价上探 0.5 元/张，长文本小字渲染仍偶有错漏。","avail":"mixed","sources":["https://tongyi.aliyun.com/wan/","https://help.aliyun.com/zh/model-studio/text-to-image","https://help.aliyun.com/zh/model-studio/image-edit"]},{"name":"腾讯混元生图（混元图像 3.0 / 3.0-Instruct，含混元官网与腾讯元宝入口）","developer":"腾讯","type":"文生图 + 图生图编辑（HunyuanImage 3.0 原生多模态生图，Instruct 版支持指令编辑）+ 开源权重 + API","score":{"value":8.5,"range":"7.9-8.9","basis":"混元图像 3.0 于 2025-10 登顶 LMArena 文生图盲测榜第一（腾讯官方与多家媒体广泛报道），SuperCLUE-Image（2026-08）Hy-Image-3.0 77.82 分居国产第 6，Artificial Analysis 文生图榜混元图像 3.0 约 944–985 Elo（开源权重版更高），呈现「单项登顶、综合中上」的两极口碑。"},"official_url":"https://hunyuan.tencent.com/image","official_url_label":"腾讯混元生图 官网（HunyuanImage）；消费端入口：腾讯元宝 yuanbao.tencent.com","free_quota":"混元生图 API 首次开通赠送 50 次免费额度（腾讯云口径）；腾讯元宝 App 内可免费使用，受每日额度限制。","price_cny":"API 按张计费：混元生图 3.0 后付费 ¥0.2/张，另有资源包档（约 ¥200/1000 张）。腾讯云公告提示混元大模型相关功能将逐步迁移至 TokenHub，计费页与入口可能随之调整，具体以腾讯云最新公告为准。","price_usd":"","strengths":"国内少见的 80B 级开源原生多模态生图模型（开放权重可自部署），曾登顶 LMArena 文生图；中文/英文文字生成与真实感人像较强，腾讯云与元宝生态内接入成本低。","limitations":"第三方综合评测（SuperCLUE-Image 77.82 分）明显低于字节、阿里头部模型，「登顶」为单一榜单结果、存在口径争议；消费端入口以对话式为主，专业参数与编辑控制较弱，官方计费主体正迁移至 TokenHub。","avail":"mixed","sources":["https://hunyuan.tencent.com/image","https://cloud.tencent.com/document/product/1729/111007","https://www.yangtse.com/news/ch/202510/t20251005_272985.html"]},{"name":"可灵AI（可灵图片 Kling Image 3.0 / 3.0 Omni；原「可图 Kolors」已并入）","developer":"快手（Kuaishou）","type":"文生图 + 图生图编辑（可灵图片 3.0 支持 2K/4K 直出、多图参考），并含视频生成；模型侧保留开源 Kolors / Kolors 2.1","score":{"value":7.5,"range":"6.8-8.2","basis":"Kling-v3 在 SuperCLUE-Image（2026-08）66.03 分，明显低于字节/阿里头部；但开源 Kolors 2.1 在 Artificial Analysis 文生图榜约 944 Elo，即刻/知乎/B 站社区对可灵图片的「影视级质感」与 4K 直出评价较高，故给出中上、方差较大的评分。"},"official_url":"https://app.klingai.com/cn/","official_url_label":"可灵AI 国内站（原可图平台公告迁移至 klingai.kuaishou.com）","free_quota":"Basic/免费档可长期免费使用（国际站标注 free forever，但每月不赠送订阅灵感值）；社区实测国内每日约 66 灵感值，官方未承诺，待确认。","price_cny":"国内会员连续包月：黄金 ¥58/月（首月 ¥46）、铂金 ¥234/月（首月 ¥186）、钻石 ¥586/月（首月 ¥466）、黑金 ¥1149/月（首月 ¥916），对应每月 660 / 3000 / 8000 / 26000 灵感值。","price_usd":"国际站（klingai.com）：Basic $0，Standard $8.8/月（首月 $6.99）、Pro $32.56/月、Premier $80.96/月、Ultra $159.99/月（以官网为准）。","strengths":"图片与视频在同一平台打通，可灵图片 3.0 主打「影视级质感 + 2K/4K 超清直出」，模型侧 Kolors/Kolors 2.1 开源可自部署，会员档位精细（4 档）便于按用量选择。","limitations":"独立可图平台已于 2024-08-23 关闭、能力并入可灵，品牌认知仍在切换；第三方综合图像评测得分偏低（Kling-v3 66.03），免费额度小、入门档留客难，会员分档复杂易误购。","avail":"mixed","sources":["https://app.klingai.com/cn/","https://kolors.kuaishou.com","https://36kr.com/p/3718471239038593"]},{"name":"智谱 CogView（CogView-4 / CogView-3-Flash；图像旗舰已更新为 GLM-Image）","developer":"智谱AI（Zhipu AI / Z.ai）","type":"文生图为主（CogView 系列）+ 通用图像生成与编辑（GLM-Image 支持文生图与图像编辑），模型开源","score":{"value":6.5,"range":"5.8-7.2","basis":"SuperCLUE-Image（2026-08）CogView-4 仅 46.27 分、位列参评国产模型末位；Artificial Analysis 文生图榜 GLM-Image 约 891 Elo、CogView-4 未进前列；但 GLM-Image（2026-01 上线、16B 开源、主打文字渲染）在开源开发者社区口碑回暖，故给出偏低但仍有上行空间的评分。"},"official_url":"https://open.bigmodel.cn/","official_url_label":"智谱开放平台（BigModel）；技术文档 docs.bigmodel.cn","free_quota":"CogView-3-Flash 在当前平台完全免费（官方模型列表标注免费）；GLM-Image、CogView-4 为付费模型，另提供一次性体验额度。","price_cny":"CogView-4：¥0.06/次。GLM-Image：按次计费约 ¥0.1/次（资源包 200 次 ¥20、500 次 ¥50、1 万次 ¥1000；限时特惠 200 次 ¥5.9、500 次 ¥40、1 万次 ¥800）。","price_usd":"待确认（Z.AI 国际站按张计费，第三方资料记录 GLM-Image 约 $0.015/张、CogView-4 约 $0.01/张，非官方公示价）。","strengths":"价格门槛最低的一档（CogView-3-Flash 免费、GLM-Image 约 0.1 元/次、CogView-4 0.06 元/次）；GLM-Image 为 16B 开源模型、主打文字渲染与中文排版，BigModel 与国内开发者工具链集成成熟。","limitations":"生成质量是国产大厂中最弱一档（CogView-4 在 SuperCLUE-Image 仅 46.27 分）；产品线命名跳跃（CogView-4 之后直接过渡到 GLM-Image），CogView 品牌实际被弱化；开源权重需自行部署才能压榨质量。","avail":"mixed","sources":["https://open.bigmodel.cn/","https://docs.bigmodel.cn/cn/guide/models/image-generation/cogview-4","https://docs.bigmodel.cn/cn/update/new-releases"]},{"name":"MiniMax 海螺AI 图像（自研 image-01 / image-01-live + 客户端图片编辑器）","developer":"MiniMax（名之梦）","type":"文生图 + 图生图编辑（API 的 image-01 / image-01-live 支持文生图与参考图生图；海螺AI 消费端「图片编辑器」可调用 Seedream 5.0 Lite、Nano Banana 2 等第三方模型）","score":{"value":7.0,"range":"6.5-7.6","basis":"自研 image-01 未进入 SuperCLUE-Image、Artificial Analysis 等主流文生图榜单前列，作品以「性价比 + 人像自然」见长，即刻/小红书社区口碑中等；但 API 单价仅 ¥0.025/张，且海螺AI 客户端聚合了多个头部第三方图像模型，实际可用上限取决于所选模型。"},"official_url":"https://www.hailuoai.com","official_url_label":"海螺AI 官网（消费端）；MiniMax 开放平台 platform.minimaxi.com","free_quota":"海螺AI 消费端提供免费额度（视频生成侧明确）；图像编辑器的免费次数官方未单列，待确认。API 侧无免费额度，需充值使用。","price_cny":"API：image-01 / image-01-live  ¥0.025/张（MiniMax 国内平台按量计费）。消费端海螺AI 以视频订阅为主，图像功能未见独立付费档，待确认。","price_usd":"$0.0035/张（MiniMax 国际平台 platform.minimax.io 的 image-01 / image-01-live 按张计费）。","strengths":"图像 API 单价是主流国产模型中最低的一档（¥0.025/张、$0.0035/张），自研 image-01 的人像与自然质感口碑不错；海螺AI 客户端还能直接调用 Seedream 5.0 Lite、Nano Banana 2 等外部模型。","limitations":"图像不是其主战场——官方用户协议明确「海螺AI 目前提供的服务以视频内容生成服务为主」，文生图质量与迭代节奏落后于字节/阿里；消费端图像入口依赖第三方模型，自研图像模型的产品化程度低。","avail":"mixed","sources":["https://www.hailuoai.com","https://platform.minimaxi.com/docs/guides/pricing-paygo","https://platform.minimax.io/docs/guides/pricing-paygo"]},{"name":"HiDream 智象未来（HiDream-O1-Image-1.5）","developer":"北京智象未来科技有限公司（HiDream.ai）","type":"文生图 / 图生图编辑 / 多模态生成（含图生视频、文生视频）","avail":"mixed","score":{"value":8.5,"range":"8.0-9.0","basis":"依据 Artificial Analysis 文生图榜（Text to Image Leaderboard）HiDream-O1-Image-1.5 登上中国第一、全球第二（科技日报/中国科技网 2026-06-11 报道，智东西 2026-06-11 为「总榜第三、国内第一」），结合 36 氪、凤凰网对同一评测的报道与开源模型社区口碑。"},"official_url":"https://hidreamai.com/","official_url_label":"HiDream.ai 智象未来官网（首页明确标注 HiDream-O1-Image-1.5「1 in China! No.2 Globally!」）","free_quota":"官网标注可免费试用（TRY IT — IT'S FREE）；消费端 App「智小象AI」与网页端每日免费额度官方未公示（待确认）。经讯飞开放平台可领 HiDream 免费试用包：100 张（个人）/200 张（企业），有效期 1 年。","price_cny":"开放平台（hidreamai.com/platform）：文生图 v2L 3 点/张；算力定制套餐 图像类 ¥8000/并发/月、视频类 ¥15000/并发/月。消费端「智小象AI」App（App Store 公示）：普通年会员 ¥500、PLUS 月 ¥175 / 年 ¥1688、MAX 月 ¥390 / 年 ¥4199、PRO 月 ¥450 / 年 ¥5088。讯飞开放平台转售：800 张套餐 0.65 元/张。","price_usd":"","strengths":"自研原生全模态基础模型，图像模型在 Artificial Analysis 文生图榜曾列中国第一、全球第二；同时提供开源模型与商用 API 双轨。","limitations":"消费端免费额度与会员体系不透明；产品线偏企业/影视与多模态，纯文生图的 C 端体验与中文文字渲染缺独立权威评测。","sources":["https://hidreamai.com/","https://www.hidreamai.com/platform","https://apps.apple.com/cn/app/%E6%99%BA%E5%B0%8F%E8%B1%A1ai/id6745259607","http://www.stdaily.com/web/gdxw/2026-06/11/content_530697.html","https://www.xfyun.cn/services/Image_generation"]},{"name":"WHEE","developer":"厦门美图网科技有限公司（美图公司）","type":"文生图 / 图生图编辑（修图、换背景、扩图、超清）/ 应援物料与周边定制","avail":"mixed","score":{"value":7.5,"range":"7.0-8.1","basis":"依托美图影像与奇想大模型 MiracleVision 的技术积累，官网现主打「追星物料创作平台」并强调画质修复/换背景等编辑能力；结合 App Store 评分（WHEE 应用页）与修图/应援社区口碑，暂无权威文生图榜单。"},"official_url":"https://www.whee.com/","official_url_label":"WHEE 官网（现定位「WHEE-追星人都在用的神图制造机」；官方会员协议托管于 pro.meitu.com/whee）","free_quota":"官方未公示 WHEE 专属免费额度；美豆为按次消耗的虚拟额度，需通过充值或会员赠送获取（待确认）。美图系产品试用期可赠送美豆（美图 SaaS 订阅页显示试用期赠 120 美豆、会员每月赠 330 美豆，为美图系口径）。","price_cny":"官方页未公示 WHEE 人民币会员档位；WHEE VIP 服务协议（pro.meitu.com/whee）仅说明美豆由厦门美图网科技有限公司提供、可用于美图系产品。App Store（id1150322669）公示：WHEE VIP 每月赠 360 美豆，月费约 $2.5、年费约 $24（美元区）。人民币价目待确认。","price_usd":"WHEE VIP：月费约 $2.5、年费约 $24（App Store 公示，每月赠 360 美豆）","strengths":"美图影像技术积累，换背景/加滤镜/去路人/超清修复等图生图编辑顺手，应援模板与周边定制玩法贴合国内追星用户。","limitations":"以「美豆」计费，会员与美豆双层付费易超支；官网未公示人民币档位与免费额度，价格口径不透明。","sources":["https://www.whee.com/","https://pro.meitu.com/whee/agreements/main/vip-service.html?lang=zh","https://apps.apple.com/zm/app/whee-fan-merch-art-maker/id1150322669","https://pc.meitu.com/vip"]},{"name":"LiblibAI 哩布哩布 AI","developer":"北京演语科技有限公司（原北京奇点星宇科技有限公司；集团品牌 Evoken）","type":"社区·开源生态（模型分享）/ 在线生图 / 工作流","avail":"mixed","score":{"value":8.0,"range":"7.5-8.5","basis":"国内极具影响力的 AI 创作平台，官网聚合 Seedream 5.0 Pro、可灵 3.0、Seedance 2.5 等头部模型；2026-06 完成近 3 亿美元 B+ 轮融资、估值超 20 亿美元（36 氪/新浪科技/经济参考网报道），社区口碑强。"},"official_url":"https://www.liblib.art/","official_url_label":"LiblibAI·哩布哩布AI 官网（页脚主体：北京奇点星宇科技有限公司）","free_quota":"平台提供免费在线生图；免费用户每日赠送积分（第三方口径约 20 积分/日，官方页面未直接公示，待确认）。","price_cny":"创作会员（官方 viphome）：尊享版 ¥22999/年（次年续费 ¥10999、858 元/月，50500–66000 积分/月，1 积分=0.017 元）；进阶/高级/豪华版分档订阅。API 开放平台（官方 apis 页）：¥10 起，100 积分=1 元（会员价 0.9 元）。","price_usd":"","strengths":"模型生态最丰富，支持开源模型在线生图与 LoRA 训练，积分制灵活、中文界面友好，API 商用授权清晰。","limitations":"出图质量取决于所选模型而非平台统一水平；会员积分按月清零、重度使用成本高。","sources":["https://www.liblib.art/","https://www.liblib.art/viphome","https://www.liblib.art/apis","https://36kr.com/p/3872803056302723","https://finance.sina.com.cn/tech/roll/2026-06-18/doc-inicvrtr5469405.shtml"]},{"name":"吐司 TusiArt","developer":"上海必有回响智能科技有限公司","type":"社区·开源生态（模型分享）/ 在线生图 / 工作流（Canvas、ComfyUI）","avail":"mixed","score":{"value":7.5,"range":"7.0-8.2","basis":"国内主流 AI 模型分享与在线生图社区之一（tusiart.com 跳转 tusi.cn），官网称「可在线生图的 AI 模型分享社区，还是免费的」；结合 AI 工具导航站与社区口碑，无权威文生图榜单。"},"official_url":"https://tusi.cn/","official_url_label":"吐司 TusiArt 官网（tusiart.com 自动跳转至 tusi.cn；运营主体上海必有回响智能科技有限公司）","free_quota":"官方更新日志显示以「Energy」为算力单位并提供免费 Energy（邀请好友、算力兑换等）；用户口径「每人每天送 100 积分」，第三方口径不一（每日约 50–300 单位），待官方确认。","price_cny":"待确认（官方定价页 https://tusi.cn/pricing、https://tusi.cn/vip 抓取失败）。第三方工具站口径：1 日体验 ¥3（附赠 100 算力）、30 日套餐 ¥24.9（额外 1000 算力）、90 日 ¥39.9（追加 5000 算力）。","price_usd":"","strengths":"模型库与在线生图免费门槛低，支持 ComfyUI 工作流与视频模型（Seedance、Wan、MiniMax 等），社区活跃。","limitations":"官方价格与免费额度未清晰公示；2026 年 6 月起调整创作者激励并转向 Canvas 与 Agent 方向，生态稳定性待观察。","sources":["https://tusi.cn/","https://tusi.cn/updates","https://www.aitop100.cn/tools/detail/1859.html","https://ai-nav.net/4064.html","https://m.tianyancha.com/brand/baacc868664"]},{"name":"堆友 D.Design","developer":"阿里巴巴设计（Alibaba Design；部分媒体称阿里国际数字商业集团）","type":"设计平台内置 AI 生图（AI 反应堆：文生图/图生图）/ AI 工具箱 / 3D 素材库","avail":"mixed","score":{"value":7.5,"range":"7.0-8.0","basis":"阿里设计出品的一站式 AI 设计平台，以免费可商用 3D 素材与「AI 反应堆」著称；结合量子位实测（每天免费赠超 200 堆豆）、阿里云开发者社区与设计师工具站口碑，无权威文生图榜单。"},"official_url":"https://d.design/","official_url_label":"堆友 D.Design 官网（阿里设计；第三方来源一致指向 d.design，官方价格页拒绝自动化访问）","free_quota":"第三方一致口径：新用户注册赠 50 堆豆，每日登录 +50 堆豆，关注公众号 +20，邀请好友 +50/人，收藏书签 +50，完善资料 +20；量子位实测称每天免费赠送超 200 堆豆。","price_cny":"第三方一致口径：个人会员连续包月 ¥39/月（每月赠 240 堆币≈2400 堆豆）、季卡 ¥109、半年卡 ¥179、年卡 ¥299；团队会员 ¥399/人起；堆豆加油包另售。官方价格页 d.design/vip 拒绝自动化访问，待官方确认。","price_usd":"","strengths":"阿里生态与设计资源，3D 素材与模板免费可商用，AI 反应堆上手门槛低、日常免费额度可支撑出图。","limitations":"以堆豆计费，会员与加油包叠加；官方价格页难以核验，免费额度依赖每日任务；纯文生图质量非国内第一梯队。","sources":["https://d.design/","https://developer.aliyun.com/article/1260820","https://c.m.163.com/news/a/J8908ED405118B5P.html","https://toolin.ai/tools/duiyou"]},{"name":"MuseAI","developer":"特赞（上海）信息科技有限公司（Tezign）","type":"设计平台内置 AI 生图 / AI 创意工作台（生成 + 专业编辑 + 品牌规范 + 多格式适配）","avail":"unknown","score":{"value":7.3,"range":"6.8-7.8","basis":"特赞官网将其定位为「面向专业创作者与团队 · AI 创意工作台」，把专属模型训练、多模态生成与专业编辑整合；作为商业/企业方向产品，缺独立文生图权威评测，依据有限，给予中性偏上评分。","note":"本批次清单将 MuseAI 归属「天娱数科」，经核验未能证实；官方资料显示 MuseAI 归属特赞（上海）信息科技有限公司（tezign.com/products/museai）。归属问题另见 pending。"},"official_url":"https://www.tezign.com/products/museai","official_url_label":"MuseAI | 特赞 官网产品页（另有独立域名 museai.cc）","free_quota":"待确认（未见公开免费额度说明）。","price_cny":"待确认（面向企业与团队，未见公开价目）。","price_usd":"","strengths":"把灵感参考、数据集与专属模型训练、多模态生成、可控编辑与规模化生产组织在同一工作台，偏 B 端与团队协作交付。","limitations":"公开定价与免费额度缺失，个人用户上手门槛高；中文文字渲染与生成质量无权威独立评测。","sources":["https://www.tezign.com/products/museai","https://tezign.com/en/products/museai","https://www.tezign.com/products","https://museai.cc/"]},{"name":"360智绘（360鸿图）","developer":"三六零（360）","type":"文生图 / 图生图编辑（涂鸦生图、局部重绘）/ LoRA 模型训练","avail":"mixed","score":{"value":7.2,"range":"6.8-7.8","basis":"依托 360 智脑大模型，官方应用页称其为「极简生图应用」，功能覆盖文生图/图生图/涂鸦生图/LoRA 训练；结合 AI 工具站的定价与功能梳理，无权威文生图榜单。"},"official_url":"https://aigc.360.com/","official_url_label":"360智绘官网（360 AI 应用中心亦有入口 ai.360.cn）","free_quota":"新用户注册赠 100 图豆；标清生图 2 图豆/张，模型训练 150 图豆/次（第三方一致口径）。","price_cny":"第三方一致口径：会员连续包月 ¥28/月、单月 ¥38、季度 ¥91、年度 ¥310（含每月约 200 张生成额度 + 100 图豆 + 2 次风格训练）；图豆充值 8.8 元/100 图豆、26.6 元/300 图豆。待官方确认。","price_usd":"","strengths":"免费额度对新手友好，功能覆盖文生图/图生图/涂鸦生图/LoRA 训练，网页端无需下载。","limitations":"界面与工作流偏「SD 部署」风格，进阶需调参；官方价格页未直接核验，出图质量非国内第一梯队。","sources":["https://aigc.360.com/","https://ai.360.cn/customer/?target=b6","https://gongke.net/tools/360-pic","https://ai-good.cn/sites/aigc-360/"]},{"name":"天工 AI（天工超级智能体 SkyClaw）图像生成","developer":"昆仑万维科技股份有限公司","type":"智能体内置图像生成 / 多模态内容生成（文档、PPT、图片、视频、播客一键生成）","avail":"mixed","score":{"value":7.5,"range":"7.0-8.2","basis":"昆仑万维「4+3」AGI 战略下的多模态能力，天工超级智能体支持图片等多模态内容生成（中国证券报 2026-04-24、中国经济网 2026-04-28 报道）；独立文生图入口主要在 App 内，缺专项图像评测。"},"official_url":"https://www.tiangong.cn/","official_url_label":"天工 AI 官网（天工超级智能体 Skywork Super Agents / SkyClaw）","free_quota":"App 与网页端提供积分制免费额度；具体每日/新用户赠送数额官方未在当前页面公示（待确认）。","price_cny":"官方 App Store（开发者：北京昆仑万维科技股份有限公司）：会员体系已由积分购买升级为会员制，天工 Plus 会员 ¥85；另有 Basic 连续包月 ¥45、Basic 月度 ¥48 及积分包 10000 积分 ¥48、15000 积分 ¥78、20000 积分 ¥91、50000 积分 ¥200（App Store 内购公示口径）。","price_usd":"","strengths":"昆仑万维自研多模态模型底座，中文理解与智能体编排能力强，图片/PPT/视频/播客一站式生成。","limitations":"图像生成被包在「超级智能体」中，缺少独立可控的文生图/图生图工作台；积分为跨功能统一计费，单张图成本不易估算。","sources":["https://www.tiangong.cn/","https://apps.apple.com/cn/app/%E5%A4%A9%E5%B7%A5/id6447616432","https://epaper.cs.com.cn/zgzqb/html/2026-04/24/nw.D110000zgzqb_20260424_1-B277.htm","http://finance.ce.cn/stock/gsgdbd/202604/t20260428_2935857.shtml"]},{"name":"无界AI","developer":"杭州超节点信息科技有限公司（原「无界版图」）","type":"文生图 / 图生图编辑（照改漫、AI 魔法头像）/ 模型训练 / 社区（广场一键同款）","avail":"mixed","score":{"value":7.7,"range":"7.0-8.4","basis":"国内较早 AIGC 绘画平台之一，移动端 App 与专业版均以 AI 绘画为核心，功能覆盖文生图、照改漫、模型训练与「广场一键同款」；结合官方功能页与社区口碑，无近期权威榜单。"},"official_url":"https://www.wujieai.com/","official_url_label":"无界AI 官网（AI 绘画产品主入口为移动端 m.wujieai.com；桌面端另有「无界AI 全能工作助手」产品线）","free_quota":"新用户注册赠积分（早期 +50 起，含实名认证、绑卡等任务奖励），移动端首页横幅显示「下载即赠 2000 积分」（官方页面）。","price_cny":"官方会员服务协议（2023-06）：连续包月 iOS ¥128/月、安卓 ¥100/月。官方公告（2023-04）：月会员 ¥100/月、年会员 ¥1000/年。当前官网价目待确认。","price_usd":"美区 App Store：连续包月会员 $24.99、年卡 $249.99","strengths":"国风与中文提示词理解较好，模型与风格库丰富，首创「广场一键同款」，支持模型训练与 PC 端专业版。","limitations":"官网首页现混入面向企业的「无界 Harness/CLI」产品，定位不够聚焦；价格与免费政策近年多次调整，当前口径待确认。","sources":["https://m.wujieai.com/","https://m.wujieai.com/us/member-agreement","https://www.wujieai.com/desktop/changelog","https://apps.apple.com/ca/app/%E6%97%A0%E7%95%8Cai-ai%E7%BB%98%E7%94%BB%E8%BD%AF%E4%BB%B6ai-art%E8%89%BA%E6%9C%AF%E5%88%9B%E4%BD%9C-ai%E8%AE%BE%E8%AE%A1%E5%8A%A8%E6%BC%AB%E4%BA%BA%E7%89%A9/id1625248503","https://www.wujiebantu.com/article/6765771"]},{"name":"妙鸭相机","developer":"阿里虎鲸文娱（原阿里大文娱）旗下（运营主体待确认）","type":"图生图编辑（AI 写真 / 数字分身人像生成）","avail":"paid","score":{"value":6.8,"range":"6.3-7.3","basis":"AI 写真「像本人又比本人好看」的生成效果获界面新闻、中国新闻周刊、证券时报等媒体报道，一度被视为国内 AIGC 首个现象级 C 端应用；但央视 2023 年调查曾指出写真质量差、退款难与隐私风险，团队已解散、产品不再升级。"},"official_url":"https://www.miaoya.cn/","official_url_label":"妙鸭相机官网","free_quota":"无免费档，按写真模板付费生成（2023 上线价 9.9 元/套，媒体报道）。","price_cny":"9.9 元/套写真（2023-07 上线价，界面新闻/证券时报报道）；因团队已解散、功能不再升级，当前档位与价格待确认。","price_usd":"","strengths":"人像写真「数字分身」效果曾达影楼级，使用门槛低（上传约 20 张照片即可生成多套风格写真）。","limitations":"团队已于 2025 年 9 月底解散、仅保留最低程度运营，产品不再升级与推广；央视与媒体曾报道成片质量、退款与隐私争议。","sources":["https://www.miaoya.cn/","https://www.jiemian.com/article/9788594.html","https://cbgc.scol.com.cn/news/7610162","https://finance.sina.com.cn/tech/digi/2026-05-14/doc-inhxwkue8634903.shtml","https://m.21jingji.com/article/20260710/herald/5f37d493593b823715229a236c12b2f5.html"]},{"name":"网易丹青约（丹青模型）","developer":"网易伏羲（网易（杭州）网络有限公司）","type":"文生图 / 图生图编辑（AI 修图）/ 企服多模态能力","avail":"unknown","score":{"value":7.4,"range":"6.9-7.9","basis":"网易伏羲自研「丹青」文生图模型，中文理解与中国传统意象生成优势被 InfoQ、中国日报（2023 WAIC 由丹青约提供 AI 绘画技术支持）报道；「易生诸相」多模态大模型（含玉言文生文、丹青文生图）已于 2023-12 通过国家备案。"},"official_url":"https://fuxi.netease.com/AOP","official_url_label":"网易伏羲官网·有灵平台（列明「丹青约 AI 绘画」等自研易生诸相大模型能力）","free_quota":"待确认（未见公开 C 端免费额度）。","price_cny":"待确认（主要面向企业客户与内部场景，未见公开 C 端定价）。","price_usd":"","strengths":"100% 国产、中文语料与中式审美见长（成语、诗句、传统美食等生成更准确），已完成国家生成式 AI 与深度合成算法备案。","limitations":"缺少独立公开的 C 端产品入口与价目，2026 年运营状态不明确；主要作为企业端能力（服务技术支持者）对内外部业务赋能。","sources":["https://fuxi.netease.com/AOP","https://fuxi.163.com/","https://cn.chinadaily.com.cn/a/202307/06/WS64a690c0a310ba94c56152b9.html","https://www.infoq.cn/article/4lkybou859nxlsk2klif","http://www.cnr.cn/ziben/yw/20240704/t20240704_526777837.shtml"]}];
+const EXCLUDED = [{"name":"百度文心一格（含文心一格 Pro）","reason":"已不再作为独立产品运营：官方域名 yige.baidu.com 已跳转/停更，原有图片创作能力并入「百度文心」的图像生成入口（「魔法图片」），旧积分与套餐说明失效；文心一格 2 在 HKU 商学院文生图评测中 Elo 仅 890（第 19），显著落后同门文心一言。百度当前图像模型为开源的 ERNIE-Image / ERNIE-Image-Turbo，未沿用「文心一格」品牌。本次直接抓取 yige.baidu.com 与 wenxin.baidu.com 均未取得有效页面内容，建议项目组二次复核官方下线公告原文。"},{"name":"快手可图 Kolors（独立平台）","reason":"独立平台已关闭：kolors.kuaishou.com 页面公告「可图平台将于 2024 年 8 月 23 日正式关闭服务」，图像生成服务迁移至「可灵AI 平台」（klingai.kuaishou.com）。Kolors 模型本身仍在运行（开源，Kolors 2.1 仍在 Artificial Analysis 文生图榜，约 944 Elo），但已不作为独立消费产品存在。已经在主表以「可灵AI（可灵图片）」条目承接。"},{"name":"阶跃星辰 Step-1X 系列（Step 1X / 2X Large / Step Image Edit）","reason":"官方已公告下线：StepFun 开放平台文档明确「step-2x-large、step-image-edit-2、step-1x-edit 将于 2026 年 10 月 10 日下线，文生图、图生图、图片编辑接口将同步停止服务」，其中 step-1x-edit 平台已不支持调用。作为 2026 年 10 月的在售图像产品已不成立（Step 5 Preview 为纯文本/多模态理解模型，不提供图像生成）。"},{"name":"凤凰大模型","reason":"无法核实存在一个归属凤凰网/凤凰卫视且提供文生图能力的「凤凰大模型」产品。新华网 2023-11-15 报道显示，凤凰卫视为「凤凰大模型数据研讨沙龙」主办方，同期推出的是「凤凰智媒 AI 数据业务」（中文访谈对话数据集、正向价值对齐数据集），方向为 AI 数据与语料而非文生图；2026-03-31 凤凰卫视与火山引擎签署深度合作、依托豆包大模型做内容生产智能化升级，亦未见自研文生图产品。此外「凤凰大模型」为多主体同名（另有机构与商标主体使用该名称），本批次无法核实其归属与文生图能力，故移出主表。"}];
+const PENDING = [{"item":"即梦AI 标准会员 ¥199/月、高级会员 ¥499/月等价档","reason":"该档位来自 36 氪等媒体报道，App Store 官方内购页仅公示基础会员 ¥69/月、¥659/年；需以即梦 App 内订阅页复核后写入。"},{"item":"即梦AI / Dreamina 海外版统一美元定价","reason":"官方按区域定价，本次仅取到新加坡 S$ 档位（第三方名录），无官方统一 USD 公示价。"},{"item":"豆包「图片生成」免费用户每日免费张数","reason":"官方仅表述为「每日有一定免费次数，次日重置」，未公示具体数值。"},{"item":"剪映 AI 作图 / 醒图 AI 功能的独立免费额度与计费规则","reason":"官方订阅页只列会员与云空间档位，未单列 AI 作图的额度口径。"},{"item":"百度文心一格下线公告的官方原文 URL，以及百度当前图像产品（「百度文心」魔法图片 / ERNIE-Image 模型）的官方定价与免费额度","reason":"yige.baidu.com 与 wenxin.baidu.com 本次抓取均未取得有效内容（解析失败/空内容），无法核验官方页面。"},{"item":"腾讯混元生图 API 计费页的确切 URL 与迁移至 TokenHub 后的新价格","reason":"腾讯云公告提示混元大模型相关功能将逐步迁移至 TokenHub，计费主体变更后价格口径需重新核验。"},{"item":"智谱 Z.AI 国际站的美元单价（GLM-Image / CogView-4）","reason":"官方中文站以人民币按次计费，国际站美元价仅在第三方资料中出现。"},{"item":"可灵AI 每日免费灵感值，以及国内会员首月价/续费价的官方页面 URL","reason":"社区实测约 66 灵感值/日，官方 Credits 政策未承诺；会员档位数据来自启发式抓取的会员页，缺少稳定可引用的官方链接。"},{"item":"通义万相消费端（通义 App）会员价格与每日免费额度","reason":"官方未公示明确数值，仅能确认 API 侧按张计费与百炼新用户一次性免费额度。"},{"item":"MuseAI 的归属","reason":"本批次清单将 MuseAI 标注为「天娱数科」，但未检索到天娱数科旗下名为 MuseAI 的产品（其 AIGC 生图能力体现在「元趣」/MetaSurfing-元享平台，AI 业务聚焦智能营销、智慧能源、空间智能）；官方资料显示 MuseAI 归属特赞（上海）信息科技有限公司（tezign.com/products/museai）。已按实际归属收录，原归属待确认。另存在多个同名「Muse AI」站点（museailab.com、museai.pro 等），需注意区分。"},{"item":"HiDream 消费端（智小象AI/网页端）免费额度","reason":"官网仅标注可免费试用，未公示每日/每月具体免费生成次数。"},{"item":"WHEE 人民币会员价格与免费额度","reason":"官网与会员协议均未公示人民币档位；App Store 以美元区口径公示（月费约 $2.5、年费 $24，每月赠 360 美豆）。"},{"item":"吐司 TusiArt 会员与算力价格、每日免费额度","reason":"官方定价页 tusi.cn/pricing、/vip 抓取失败（页面无法加载）；第三方与用户口径不一（每日免费 50–300 算力单位）。"},{"item":"堆友官方价格与免费额度","reason":"官方价格页 d.design/vip 被 robots.txt 拒绝自动化访问，价格与堆豆赠送规则来自第三方工具站，未能以官方页面复核。"},{"item":"无界AI 当前价格与官网定位","reason":"可获知的价格为 2023 年官方会员协议/公告（连续包月 ¥100–128/月、年会员 ¥1000/年）；官网首页现展示面向企业的「无界 Harness/CLI」，与移动端 AI 绘画产品并存，官方当前价目与产品关系待确认。"},{"item":"天工 AI 独立文生图能力与当前免费额度","reason":"tiangong.cn 已升级为「天工超级智能体 SkyClaw」，图像生成作为智能体能力之一；独立的文生图/图生图入口、当前免费额度与单张成本待确认。"},{"item":"网易丹青约 2026 年运营状态与 C 端入口","reason":"仅见网易伏羲官网·有灵平台的产品能力描述与个大模型备案信息，未见独立公开的 C 端产品域名与价目；是否仍对 C 端开放待确认。"},{"item":"妙鸭相机 运营主体与当前付费档位","reason":"公开报道仅说明归属阿里虎鲸文娱（原阿里大文娱）旗下，运营公司主体未见权威披露；9.9 元/套为 2023 上线价，团队解散后当前是否仍可付费生成与价格待确认。"}];
+const TIMELINE = [{"date":"2023.04","title":"天娱数科元境科技发布 AIGC 应用「元趣」","desc":"天娱数科子公司元境科技基于「MetaSurfing-元享智能云平台」孵化 AIGC 应用「元趣」，实现文生文、文生图、文生音频与文生视频（天娱数科官网，2023-04-29 官微口径）。","source":"https://tianyushuke.com/xwmt/2023/2023-05-09/398.html"},{"date":"2023.07","title":"妙鸭相机正式上线并刷屏","desc":"2023 年 6 月 30 日以小程序形式邀请制内测，7 月 17 日正式开放；上传 20 张以上照片、支付 9.9 元即可获得 AI 数字分身与多套写真，高峰期数千人排队。","source":"https://www.jiemian.com/article/9788594.html"},{"date":"2023.11","title":"凤凰卫视推出「凤凰智媒 AI 数据业务」","desc":"「凤凰大模型数据研讨沙龙」在京举办，凤凰卫视正式推出「凤凰智媒 AI 数据业务」并发布中文访谈对话数据集，方向为 AI 数据与语料，而非文生图产品。","source":"http://www.news.cn/tech/20231115/cd94a839598246bd98223f4d278fbb3d/c.html"},{"date":"2024.08","title":"快手可图 Kolors 独立平台关闭，能力并入可灵AI","desc":"可图平台公告「将于 2024 年 8 月 23 日正式关闭服务」，图像生成服务迁移至可灵AI 平台（klingai.kuaishou.com）；Kolors 模型本身转为开源存续。","source":"https://kolors.kuaishou.com"},{"date":"2025.09","title":"字节跳动发布 Seedream 4.0（生成与编辑统一架构）","desc":"官方博客 2025-09-09 发布，采用同一套架构实现文生图与通用编辑、支持最高 4K 分辨率，正式上线即梦、豆包、火山方舟。","source":"https://seed.bytedance.com/zh/blog/seedream-4-0-officially-released-beyond-drawing-into-imagination"},{"date":"2025.09","title":"腾讯发布并开源混元图像 3.0（HunyuanImage 3.0）","desc":"2025-09-28 发布并开源的 80B 参数原生多模态生图模型，随后于 2025-10 登顶 LMArena 文生图盲测榜第一。","source":"https://new.qq.com/rain/a/20251005A03P0200"},{"date":"2026.05","title":"妙鸭相机被曝团队已于 2025 年 9 月底解散","desc":"虎鲸文娱（原阿里大文娱）旗下妙鸭相机团队被曝解散，产品不再升级与推广，仅保留最低程度运营；安卓商店与 App Store 仍可下载。","source":"https://finance.sina.com.cn/tech/digi/2026-05-14/doc-inhxwkue8634903.shtml"},{"date":"2026.06","title":"豆包专业版正式上线，确立三档 C 端订阅","desc":"2026-06-24 上线，采用标准 ¥68/月、加强 ¥200/月、高级 ¥500/月 三级阶梯定价，图片与视频生成等高级功能共享同一额度池。","source":"https://www.stdaily.com/web/gdxw/2026-06/24/content_536585.html"},{"date":"2026.06","title":"智象未来图像模型登 Artificial Analysis 文生图榜全球第二","desc":"智象未来（HiDream.ai）商用版图像生成模型 HiDream-O1-Image-1.5 在 Artificial Analysis 文生图榜登上中国第一、全球第二（部分报道口径为总榜第三/国内第一），评分仅次于 OpenAI。","source":"http://www.stdaily.com/web/gdxw/2026-06/11/content_530697.html"},{"date":"2026.06","title":"演语科技（LiblibAI 母公司）完成近 3 亿美元 B+ 轮融资","desc":"6 月 18 日，LiblibAI 母公司演语科技（Evoken）宣布完成近 3 亿美元 B+ 轮融资，Granite Asia、腾讯、顺为资本联合领投，投后估值超 20 亿美元。","source":"https://finance.sina.com.cn/tech/roll/2026-06-18/doc-inicvrtr5469405.shtml"},{"date":"2026.07","title":"字节跳动发布 Seedream 5.0 Pro（交互式精准编辑）","desc":"2026-07-08 发布，支持点选/圈选/草图渲染、色彩与材质替换、图层分离、多图融合等像素级编辑，陆续上线豆包与即梦。","source":"https://seed.bytedance.com/zh/blog/beyond-generation-it-understands-design-introducing-seedream-5-0-pro"},{"date":"2026.10","title":"阶跃星辰图像生成与编辑 API 全线下线","desc":"官方文档公告 step-2x-large、step-image-edit-2、step-1x-edit 于 2026 年 10 月 10 日下线，文生图、图生图、图片编辑接口同步停止服务，本批次据此予以排除。","source":"https://platform.stepfun.com/docs/zh/guides/models/image"}];
+const FINDINGS = [{"t":"第一梯队 6 席，前四全是大厂自研模型","p":"评分 ≥8.0 的共 6 个对象：即梦AI 9.0、豆包图片生成 8.8、通义万相 8.7、腾讯混元生图 8.5、HiDream 智象未来 8.5、LiblibAI 8.0。前四席由字节（即梦、豆包）、阿里（通义万相）、腾讯（混元生图）三家大厂的自研模型占据，其评分依据均指向可核验的公开榜单（SuperCLUE-Image 2026-08、Artificial Analysis 2026-10、Arena.ai 2026-09-24）。两个非大厂席位也各有硬支撑：智象未来凭自研 HiDream-O1-Image-1.5 登上 Artificial Analysis 文生图榜中国第一，LiblibAI 则以聚合 Seedream 5.0 Pro、可灵 3.0 等头部模型的平台形态进入该梯队。"},{"t":"16/19 走双轨制，最低门槛在 API 侧","p":"19 个对象中 16 个（84%）是「免费额度 + 付费订阅」双轨，1 个仅付费（妙鸭相机）、2 个口径无法确认（MuseAI、网易丹青约），没有一个是完全免费或以开源免费为主。免费额度普遍是「每日赠送、当日或次日清零」的积分制（即梦每日随机积分 24:00 清零、豆包每日免费次数次日重置、360智绘新用户赠 100 图豆、堆友每日登录 +50 堆豆、无界AI 下载即赠 2000 积分）。价格两极：按张/按次最低到 MiniMax image-01 ¥0.025/张、智谱 CogView-4 ¥0.06/次、腾讯混元生图 ¥0.2/张；消费端订阅从醒图会员 ¥18–28/月起，到即梦 ¥69/月、豆包专业版 ¥68/月（连续包月），最高档上探可灵黑金 ¥1149/月与 LiblibAI 尊享版 ¥22999/年。"},{"t":"3 起退出 + 18 条待确认，能力在收敛","p":"本轮考察 23 个对象、排除 4 席，其中 3 席直接是能力退出：百度文心一格已不再独立运营（域名停更，图片能力并入「百度文心」的图像入口）、快手可图独立平台于 2024-08-23 关闭并入可灵AI、阶跃星辰 Step-1X 系列图像接口公告于 2026-10-10 下线。剩下 18 条待确认集中在中小厂与社区型产品的价格/免费额度不透明（吐司 TusiArt、堆友、WHEE、无界AI、天工 AI、网易丹青约、妙鸭相机等）。头部效应的另一面是中文能力：字节 Seedream、阿里 Qwen-Image、智谱 GLM-Image 均把中文文字渲染作为主打，而 CogView-4 在 SuperCLUE-Image 仅 46.27 分、位列参评国产模型末位。"}];
+
+/* ================= 渲染 ================= */
+function esc(s){
+  return String(s==null?"":s)
+    .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;").replace(/'/g,"&#39;");
+}
+function isFreeAvail(p){ return p.avail==="free" || p.avail==="mixed"; }
+
+function renderStats(){
+  const scored = PRODUCTS.filter(p=>p.score && p.score.value!=null);
+  const top = scored.filter(p=>p.score.value>=8.0).length;
+  const freeCount = PRODUCTS.filter(p=>isFreeAvail(p)).length;
+  const el = document.getElementById('stats');
+  el.innerHTML = [
+    [PRODUCTS.length, "可评分产品与模型"],
+    [top, "评分 ≥ 8.0 的第一梯队"],
+    [freeCount, "含完全免费或免费额度"],
+    [PENDING.length, "待确认条目"]
+  ].map(c=>`<div class="cell"><div class="num">${c[0]}</div><div class="lbl">${c[1]}</div></div>`).join('');
+}
+
+function renderFindings(){
+  const el = document.getElementById('findings');
+  el.innerHTML = FINDINGS.map(f=>`<div class="f"><p class="t">${esc(f.t)}</p><p>${esc(f.p)}</p></div>`).join('');
+}
+
+function renderTable(){
+  const tbody = document.getElementById('mainTable');
+  tbody.innerHTML = PRODUCTS.map(p=>{
+    const scoreHtml = (p.score && p.score.value!=null)
+      ? `<span class="score">${p.score.value}</span><span class="note-inline">${esc(p.score.range?"区间 "+p.score.range:"待确认")}</span>`
+      : `<span class="score na">—</span>`;
+    const tagCls = p.avail==="free"?"tag free":(p.avail==="paid"?"tag paid":"tag");
+    const tag = `<span class="${tagCls}">${esc(p.avail==="free"?"免费/开源":(p.avail==="paid"?"付费":(p.avail==="mixed"?"免费+付费":"待确认")))}</span>`;
+    const typeHtml = `<span class="tag" style="display:block">${esc(p.type||"待确认")}</span>`;
+    const link = p.official_url
+      ? `<a class="ext" href="${esc(p.official_url)}">${esc(p.official_url_label||p.official_url)}</a>`
+      : `<span class="note-inline">待确认</span>`;
+    const price = p.price_cny || (p.price_usd ? "待确认" : "待确认");
+    return `<tr>
+      <td data-label="产品 / 开发方"><span class="pname">${esc(p.name)}</span><span class="dev">${esc(p.developer)}</span></td>
+      <td data-label="评分">${scoreHtml}</td>
+      <td data-label="类型 / 官方入口">${typeHtml}${tag}${link}</td>
+      <td data-label="免费额度">${esc(p.free_quota)}</td>
+      <td data-label="价格">${esc(price)}${p.price_usd?`<br><span class="note-inline">原价 ${esc(p.price_usd)}</span>`:""}</td>
+      <td data-label="特点与局限"><strong>特点：</strong>${esc(p.strengths)}<br><strong>局限：</strong>${esc(p.limitations)}</td>
+    </tr>`;
+  }).join('');
+  document.getElementById('tableCaption').textContent = `共 ${PRODUCTS.length} 项。评分区间口径：${PRODUCTS.filter(p=>p.score&&p.score.range).map(p=>p.name+" "+p.score.range).slice(0,3).join("；")}${PRODUCTS.length>3?" 等":""}；评分依据见第 03 节与信源索引。`;
+}
+
+function renderScoreChart(){
+  const list = PRODUCTS.filter(p=>p.score && p.score.value!=null).sort((a,b)=>b.score.value-a.score.value);
+  const el = document.getElementById('chartScore');
+  el.innerHTML = list.map(p=>{
+    const w = Math.max(3, Math.round(p.score.value*10));
+    const cls = isFreeAvail(p) ? "" : " paid";
+    return `<div class="hbar"><div class="hbar-label">${esc(p.name)}</div><div class="hbar-track"><div class="hbar-fill${cls}" style="width:${w}%"></div></div><div class="hbar-val">${p.score.value}</div></div>`;
+  }).join('');
+  document.getElementById('chartScoreTitle').textContent = `${list.length} 个对象的综合质量评分（满分 10）`;
+  const basis = list.map(p=>`${p.name}(${p.score.value})：${p.score.basis||""}`).join("；");
+  document.getElementById('chartScoreCaption').textContent = "评分依据："+basis;
+}
+
+function renderTypeChart(){
+  const counts = {};
+  PRODUCTS.forEach(p=>{
+    (p.type||"").replace(/（[^）]*）/g,"").split(/[·＋+、，,/]/).forEach(t=>{
+      t=t.replace(/^\s+|\s+$/g,"");
+      if(t) counts[t]=(counts[t]||0)+1;
+    });
+  });
+  const rows = Object.entries(counts).sort((a,b)=>b[1]-a[1]);
+  const el = document.getElementById('chartType');
+  const max = rows.length?rows[0][1]:1;
+  el.innerHTML = rows.map(r=>{
+    const w = Math.max(3, Math.round(r[1]/max*100));
+    return `<div class="hbar"><div class="hbar-label">${esc(r[0])}</div><div class="hbar-track"><div class="hbar-fill" style="width:${w}%"></div></div><div class="hbar-val">${r[1]}</div></div>`;
+  }).join('') || '<p class="note-inline">无数据</p>';
+}
+
+function renderFreeChart(){
+  const c = {free:0,mixed:0,paid:0,unknown:0};
+  PRODUCTS.forEach(p=>{ const k=p.avail||"unknown"; if(k in c) c[k]++; else c.unknown++; });
+  const labels = {free:"完全免费 / 开源",mixed:"免费额度 + 付费双轨",paid:"仅付费",unknown:"无法确认"};
+  const rows = Object.keys(labels).map(k=>[labels[k],c[k]]);
+  const max = Math.max(1,...rows.map(r=>r[1]));
+  const el = document.getElementById('chartFree');
+  el.innerHTML = rows.map(r=>{
+    const w = Math.max(3, Math.round(r[1]/max*100));
+    return `<div class="hbar"><div class="hbar-label">${esc(r[0])}</div><div class="hbar-track"><div class="hbar-fill" style="width:${w}%"></div></div><div class="hbar-val">${r[1]}</div></div>`;
+  }).join('');
+}
+
+function renderTimeline(){
+  const el = document.getElementById('timeline');
+  if(!TIMELINE.length){
+    document.getElementById('timelineCaption').textContent = "本轮未收录到可靠的关键节点时间线数据。";
+    return;
+  }
+  el.innerHTML = TIMELINE.map((t,i)=>{
+    const hot = (i===TIMELINE.length-1) ? " hot" : "";
+    const src = t.source?` <a class="ext" href="${esc(t.source)}">来源</a>`:"";
+    return `<div class="tnode${hot}"><div class="when">${esc(t.date)}</div><div class="axis"><i class="dot"></i></div><div class="body"><p class="what">${esc(t.title)}</p><p class="why">${esc(t.desc)}${src}</p></div></div>`;
+  }).join('');
+}
+
+function renderExcluded(){
+  const tbody = document.getElementById('excludedTable');
+  tbody.innerHTML = EXCLUDED.map(e=>`<tr>
+    <td data-label="产品 / 类型"><span class="pname">${esc(e.name)}</span><span class="dev">${esc(e.type||"")}</span></td>
+    <td data-label="排除理由">${esc(e.reason)}</td>
+  </tr>`).join('') || '<tr><td colspan="2"><span class="note-inline">本轮无排除项。</span></td></tr>';
+}
+
+function renderSources(){
+  const el = document.getElementById('sourceIndex');
+  el.innerHTML = PRODUCTS.map(p=>{
+    const links = (p.sources||[]).map((s,i)=>`<a class="ext" href="${esc(s)}">${i+1}. ${esc(s)}</a>`).join("<br>");
+    return `<div class="srcgrp"><h3>${esc(p.name)}</h3><ul class="srclist"><li class="srcitem"><span class="srclabel">信源 ${(p.sources||[]).length} 条</span><span class="srcbody">${links||'<span class="note-inline">无可用信源（待确认）</span>'}</span></li></ul></div>`;
+  }).join('');
+}
+
+function renderTodo(){
+  const el = document.getElementById('todoList');
+  el.innerHTML = PENDING.map((t,i)=>`<div class="t"><span class="n">${i+1}</span><span class="c">${esc(t.item)}<br><b>${esc(t.reason)}</b></span></div>`).join('') || '<p class="note-inline">本轮无待确认项。</p>';
+}
+
+renderStats(); renderFindings(); renderTable(); renderScoreChart();
+renderTypeChart(); renderFreeChart(); renderTimeline();
+renderExcluded(); renderSources(); renderTodo();
+</script>
+</body>
+</html>
