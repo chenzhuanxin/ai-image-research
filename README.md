@@ -1,3 +1,5 @@
+<p align="center"><img src="assets/logo.png" width="120" alt="ai-image-research"></p>
+
 # 国内外 AI 图片生成产品调研（2026-10）
 
 覆盖 **中国 19 项 + 海外 21 项** AI 图片生成产品/模型（文生图、图生图编辑、设计平台内置 AI 生图、社区/开源生态），整理为对比清单，包含：
